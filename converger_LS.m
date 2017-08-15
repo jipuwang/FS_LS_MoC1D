@@ -9,7 +9,7 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [order_phi]=converger_FS(assumedSoln)
+function [order_phi]=converger_LS(assumedSoln)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
@@ -21,7 +21,7 @@ Tau=10;
 if ~exist('assumedSoln','var')
 %   assumedSoln='sine_sine_sine';
   assumedSoln='constant';
-  assumedSoln='linear';
+%   assumedSoln='linear';
 %   assumedSoln='quadratic';
 %   assumedSoln='plus1Sqrt';
 %   assumedSoln='other_anisotropic';
@@ -46,11 +46,11 @@ for iGrid=1:nGrids
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=... 
-        manufacturer(J,N,Tau,mat,assumedSoln);
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=... 
+        manufacturer_LS(J,N,Tau,mat,assumedSoln);
       
-  [phi0_j]=MoC_module(J,N,Tau,mat,...
-    psi_b1_n,psi_b2_n,Q_MMS_j_n);
+  [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
+    psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n);
 
   % Calculate the error compared to manufactured solution
 %   error_ang_j=zeros(J,1);
