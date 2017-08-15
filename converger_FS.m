@@ -21,15 +21,15 @@ Tau=10;
 if ~exist('assumedSoln','var')
 %   assumedSoln='sine_sine_sine';
   assumedSoln='constant';
-  assumedSoln='linear';
-  assumedSoln='quadratic';
-  assumedSoln='plus1Sqrt';
+%   assumedSoln='linear';
+%   assumedSoln='quadratic';
+%   assumedSoln='plus1Sqrt';
 %   assumedSoln='other_anisotropic';
 end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
-N=8; % angular discretization, fixed not refined. 
+N=2%8; % angular discretization, fixed not refined. 
 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
@@ -46,7 +46,7 @@ for iGrid=1:nGrids
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n]=... %,error_ang_j
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=... 
         manufacturer(J,N,Tau,mat,assumedSoln);
       
   [phi0_j]=MoC_module(J,N,Tau,mat,...
@@ -54,7 +54,7 @@ for iGrid=1:nGrids
 
   % Calculate the error compared to manufactured solution
 %   error_ang_j=zeros(J,1);
-  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J) %-error_ang_j
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J) 
   
 %   % Plot the solution
 %   figure(11);

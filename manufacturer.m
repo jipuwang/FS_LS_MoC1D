@@ -2,8 +2,7 @@
     % Discretized analytical solution
     % Manufactured boundary conditions
     % Manufactured source
-function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
-          T_MMS_j,T_L,T_R,q_MMS_j]=...
+function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=...
           manufacturer(J,N,Tau,mat,assumedSoln,fbType)
   % input parameters
   if ~exist('J','var')
