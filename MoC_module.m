@@ -56,7 +56,7 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
   
   % Default variables, can be customized. 
   maxIterate=2000;
-  epsilon_phi0=1e-12;
+  epsilon_phi0=1e-13;
   delta=1E-13;
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
@@ -75,7 +75,7 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
   for iIterate=1:maxIterate
     for j=1:J
       for n=1:N
-        q_j_n(j,n)=(Sig_ss_j(j)+nuSig_f_j(j))*phi0_j_old(j)*0.5+Q_MMS_j_n(j,n);
+        q_j_n(j,n)=(Sig_ss_j(j))*phi0_j_old(j)*0.5+Q_MMS_j_n(j,n);
       end
     end
     phi0_j_new=zeros(J,1);
