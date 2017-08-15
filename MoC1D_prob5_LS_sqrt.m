@@ -4,7 +4,7 @@
 function [phi_j_new]=MoC1D_prob5_LS_sqrt(J,N)
 %% Example also as optional param
 if ~exist('J','var')
-    J=5*2*2%*2*2%*2*2*2*2*2*2
+    J=5*2%*2*2%*2*2*2*2*2*2
     %J=5%*2%*2%*2%*2%*2%*2%*2%*2%*2%*2
 end
 % 1D MoC code
@@ -158,4 +158,6 @@ display(iIterate);
 % figure(19);
 plot(phi_j_new,'*-')
 % openvar('phi_j_new')
+Q_MMS_j_n=Q_n_j';
+Q_MMS_hat_j_n=Q_n_j_hat';
 end
