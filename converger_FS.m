@@ -22,14 +22,14 @@ if ~exist('assumedSoln','var')
 %   assumedSoln='sine_sine_sine';
   assumedSoln='constant';
   assumedSoln='linear';
-  assumedSoln='quadratic';
-  assumedSoln='plus1Sqrt';
-  assumedSoln='other_anisotropic';
+%   assumedSoln='quadratic';
+%   assumedSoln='plus1Sqrt';
+%   assumedSoln='other_anisotropic';
 end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
-N=2; % angular discretization, fixed not refined. 
+N=8; % angular discretization, fixed not refined. 
 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
