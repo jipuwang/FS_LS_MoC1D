@@ -59,7 +59,7 @@ function [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
   
   % Default variables, can be customized. 
   maxIterate=2000;
-  epsilon_phi0=1e-12;
+  epsilon_phi0=1e-13;
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
   h_j=ones(J,1)*Tau/J;
@@ -88,11 +88,11 @@ q_sm_hat_j_n=zeros(J,N);
 for iIterate=1:maxIterate
   for j=1:J
     for n=1:N
-      Q_x_j_n(j,n)=0.5*(Sig_ss_j(j)+nuSig_f_j(j))*phi0_old_j(j)+Q_MMS_j_n(j,n);
+      Q_x_j_n(j,n)=0.5*(Sig_ss_j(j))*phi0_old_j(j)+Q_MMS_j_n(j,n);
       q_j_n(j,n)=Q_x_j_n(j,n);
       q_sm_j_n(j,n)=q_j_n(j,n);
 
-      Q_x_hat_j_n(j,n)=0.5*(Sig_ss_j(j)+nuSig_f_j(j))*phi0_old_hat_j(j)+Q_MMS_hat_j_n(j,n); 
+      Q_x_hat_j_n(j,n)=0.5*(Sig_ss_j(j))*phi0_old_hat_j(j)+Q_MMS_hat_j_n(j,n); 
       q_hat_j_n(j,n)=Q_x_hat_j_n(j,n)/(h_j(j)*h_j(j)/12);
       q_sm_hat_j_n(j,n)=q_hat_j_n(j,n)*(mu_n(n));   % NO ABS IS NEEDED!
     end
