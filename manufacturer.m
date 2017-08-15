@@ -31,8 +31,8 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
     assumedSoln='sine_sine';
   end
   if ~exist('fbType','var')
-    fbType='linear';
-%     fbType='noFeedback';
+%     fbType='linear';
+    fbType='noFeedback';
 %     fbType='sqareRoot';
   end
   % Material
