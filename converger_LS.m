@@ -15,7 +15,7 @@ nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
 
 % Geometry
-Tau=10; 
+Tau=10;
 
 % Case configure options
 if ~exist('assumedSoln','var')
