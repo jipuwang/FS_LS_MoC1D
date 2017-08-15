@@ -9,7 +9,7 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [order_phi]=converger_1d2angles(assumedSoln)
+function [order_phi]=converger_FS(assumedSoln)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
@@ -20,21 +20,16 @@ Tau=10;
 % Case configure options
 if ~exist('assumedSoln','var')
 %   assumedSoln='sine_sine_sine';
-  assumedSoln='IHM';
-  assumedSoln='sine_exp_exp';
-  assumedSoln='sine_const_const';
-  assumedSoln='sine_complex_complex';
-  assumedSoln='const_exp_exp';
-  assumedSoln='const_exp_const';
-%   assumedSoln='const_const_exp';
-  assumedSoln='const_const_const';
-  
+  assumedSoln='constant';
+  assumedSoln='linear';
+  assumedSoln='quadratic';
+  assumedSoln='plus1Sqrt';
+  assumedSoln='other_anisotropic';
 end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
 N=2; % angular discretization, fixed not refined. 
-I=4;
 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
@@ -51,15 +46,15 @@ for iGrid=1:nGrids
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  [phi0_j_ana,psi_b1_n_i,psi_b2_n_i,Q_MMS_j_n_i,error_ang_j]=...
-        manufacturer_1d2angles(J,N,I,Tau,mat,assumedSoln);
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n]=... %,error_ang_j
+        manufacturer(J,N,Tau,mat,assumedSoln);
       
-  [phi0_j]=OneDMoC_2Angles(J,N,I,Tau,mat,...
-    psi_b1_n_i,psi_b2_n_i,Q_MMS_j_n_i);
+  [phi0_j]=MoC_module(J,N,Tau,mat,...
+    psi_b1_n,psi_b2_n,Q_MMS_j_n);
 
   % Calculate the error compared to manufactured solution
 %   error_ang_j=zeros(J,1);
-  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J) %-error_ang_j
   
 %   % Plot the solution
 %   figure(11);
