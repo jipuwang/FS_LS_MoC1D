@@ -28,7 +28,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
   if ~exist('assumedSoln','var')
-    assumedSoln='sine_sine';
+    assumedSoln='constant';
   end
   if ~exist('fbType','var')
 %     fbType='linear';
@@ -48,31 +48,28 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
   %% Manufactured Solutions for both fields
-  % They need to be pre-defined here due to temperature dependence on the
-  % xs. 
-  % Options includes: sine_sine, const_cubic, sqrtPlus1_quadratic, etc.
+  % Options includes:   assumedSoln='constant'; 'linear'; 'quadratic';
+  % 'plus1Sqrt'; 'other_anisotropic';
+
   switch(assumedSoln)
-    case('sine_sine')
+    case('constant')
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
-      psi_MMS =@(x) sin(pi*x/Tau);
-      psi_MMS_Diff =@(x) pi/Tau*cos(pi*x/Tau);
-      % Manufactured TH solution T(x)=sin(pi*x/Tau), 0<x<Tau
-      T_MMS =@(x) sin(pi*x/Tau);
-      T_MMS_xx =@(x) -(pi*pi/Tau/Tau)*sin(pi*x/Tau);
-    case('const_cubic')
+      psi_MMS =@(x,mu) (1.0+0.0*x).*(1.0+0.0*mu);
+      psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*(1.0+0.0*mu);
+    case('linear')
+      psi_MMS =@(x,mu) 1.0+x.*exp(mu);
+      psi_MMS_Diff =@(x,mu) (1.0+x*0.0).*exp(mu);
+    case('quadratic')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
-      psi_MMS =@(x) 1.0+x*0.0;
-      psi_MMS_Diff =@(x) x*0.0;
-      % Manufactured TH solution T(x)=x.^3, 0<x<Tau
-      T_MMS =@(x) x.^3;
-      T_MMS_xx =@(x) x*6.0;
-    case('sqrtPlus1_quadratic')
+      psi_MMS =@(x,mu) 1.0+x.*x.*exp(mu);
+      psi_MMS_Diff =@(x,mu) (2*x).*exp(mu);
+    case('plus1Sqrt')
       % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
-      psi_MMS =@(x) sqrt(x+1);
-      psi_MMS_Diff =@(x) 0.5./sqrt(x+1);
-      % Manufactured TH solution T(x)=x.^2, 0<x<Tau
-      T_MMS =@(x) x.^2;
-      T_MMS_xx =@(x) 2.0+x*0.0;
+      psi_MMS =@(x,mu) sqrt(x+1).*(1.0+0.0*mu);
+      psi_MMS_Diff =@(x,mu) 0.5./sqrt(x+1).*(1.0+0.0*mu);
+    case('other_anisotropic')
+      % add code here
+      display('not defined cases');
   end
   
   %% XS update due to temperature feedback!
@@ -95,49 +92,41 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,...
   nuSig_f =@(x) nuSig_f_j(1)+x*0;
   Sig_t =@(x) Sig_ss(x)+Sig_f(x)+Sig_gamma(x);
   
-  phi0_MMS =@(x) 2*psi_MMS(x);
+%% Manufactured scalar flux and source
+  phi0_MMS =@(x) integral(@(mu) psi_MMS(x,mu), -1,1);
   % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
   % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
-  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x) +Sig_t(x).*psi_MMS(x) ...
-    -(Sig_ss(x)+nuSig_f(x))*0.5.*phi0_MMS(x);
+  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
+    -(Sig_ss(x))*0.5.*phi0_MMS(x);
   
   %% For MoC MMS solution and problem
   % Boundary condition and source
+  psi_b1_n=zeros(N,1);
   % psi expression evaluated at x=0
-  psi_b1_n=psi_MMS(0)*ones(N,1); % n=N/2+1:N % mu>0
+  for n=1:N
+      psi_b1_n(n)=psi_MMS(0,mu_n(n)); % n=N/2+1:N % mu>0
+  end
   % psi expression evaluated at x=Tau
-  psi_b2_n=psi_MMS(Tau)*ones(N,1); % n=1:N/2 % mu<0
-
+  psi_b2_n=zeros(N,1);
+  for n=1:N
+      psi_b2_n(n)=psi_MMS(Tau,mu_n(n)); % n=N/2+1:N % mu>0
+  end
+  
   phi0_MMS_j=zeros(J,1);
-  Q_MMS_j_n=zeros(J,N); % preallocate memory, avg'ed over tau_(j-1/2) and tau_(j+1/2)
+  Q_MMS_j_n=zeros(J,N);
+  error_ang_j=ones(J,1);
 
   for j=1:J
     x_L=(j-1)*h;x_R=j*h;
-    phi0_MMS_j(j)=1/h*integral(phi0_MMS,x_L,x_R);
+    phi0_MMS_j(j)=1/h*integral(phi0_MMS,x_L,x_R, 'ArrayValued',true);
+    numSum=0;
     for n=1:N
-      % g = @(c) (integral(@(x) (x.^2 + c*x + 1),0,1));
-      Q_MMS_j_n(j,n)=integral(@(x) Q_MMS(x,mu_n(n)),x_L,x_R)/h;
+        Q_MMS_j_n(j,n)= ...
+          1/h*integral(@(x) Q_MMS(x,mu_n(n)),x_L,x_R, 'ArrayValued',true);
+        spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
+        numSum=numSum+weight_n(n)*spatialAvg;
     end % n
+    error_ang_j(j)=numSum-phi0_MMS_j(j);
   end % j
-  
-  %% For TH MMS solution and problem
-  % Boundary condition and source
-  % Left boundary, T_MMS evaluated at x=0;
-  T_L=T_MMS(0);
-  % Right boundary, T_MMS evaluated at x=Tau;
-  T_R=T_MMS(Tau);
-  
-  % Discretized MMS solution
-  T_MMS_j=zeros(J,1);
-  T_MMS_xx_j=zeros(J,1);
-
-  % MMS source
-  q_MMS_j=zeros(J,1);
-  for j=1:J
-    x_L=(j-1)*h;x_R=j*h;
-    T_MMS_j(j)=1/h*integral(T_MMS,x_L,x_R);
-    T_MMS_xx_j(j)=1/h*integral(T_MMS_xx,x_L,x_R);
-    q_MMS_j(j)=k_F*T_MMS_xx_j(j)+kappaSig_f_j(j)*phi0_MMS_j(j);
-  end  
 
 end
