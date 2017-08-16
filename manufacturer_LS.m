@@ -29,11 +29,6 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
   if ~exist('assumedSoln','var')
     assumedSoln='constant';
   end
-  if ~exist('fbType','var')
-%     fbType='linear';
-    fbType='noFeedback';
-%     fbType='sqareRoot';
-  end
   % Material
   Sig_t_j=mat.Sig_t_j;
   Sig_ss_j=mat.Sig_ss_j;
@@ -71,21 +66,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
       display('not defined cases');
   end
   
-  %% XS update due to temperature feedback!
-  % Change in capture is reflected in change in total. 
-  switch fbType
-    case 'noFeedback'
-      Sig_gamma =@(x) mat.Sig_gamma_j(1)+0.0*x;
-    case 'linear'
-      % Assumes the original xs is homogeneous
-      T0=50;
-      gamma_coeff=0.004;
-      Sig_gamma =@(x) mat.Sig_gamma_j(1)+gamma_coeff*(T_MMS(x)-T0);
-    case 'squareRootPlus1'
-      T0=50;
-      Sig_gamma =@(x) mat.Sig_gamma_j(1)*sqrt((T0+1)./(T_MMS(x)+1));
-  end
-  
+  Sig_gamma =@(x) Sig_gamma_j(1)+0.0*x;
   Sig_ss =@(x) Sig_ss_j(1)+x*0;
   Sig_f =@(x) Sig_f_j(1)+x*0;
   nuSig_f =@(x) nuSig_f_j(1)+x*0;
@@ -95,10 +76,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
   phi0_MMS =@(x) integral(@(mu) psi_MMS(x,mu), -1,1);
   % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
   % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
-  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
+  Q_MMS =@(x,mu) mu.*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
     -(Sig_ss(x))*0.5.*phi0_MMS(x);
-  Q_MMS_1Mnt= @(x,mu) mu*psi_MMS_Diff(x,mu).*x +Sig_t(x).*psi_MMS(x,mu).*x ...
-    -(Sig_ss(x))*0.5.*phi0_MMS(x).*x;  
+  Q_MMS_1Mnt= @(x,mu) Q_MMS(x,mu).*x;  
   %% For MoC MMS solution and problem
   % Boundary condition and source
   psi_b1_n=zeros(N,1);
@@ -124,7 +104,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
     for n=1:N
         Q_MMS_j_n(j,n)= ...
           1/h*integral(@(x) Q_MMS(x,mu_n(n)),x_L,x_R, 'ArrayValued',true);
-        Q_MMS_hat_j_n(j,n)= integral(@(x) Q_MMS_1Mnt(x,mu_n(n)),x_L,x_R)/h...
+        Q_MMS_hat_j_n(j,n)= 1/h*integral(@(x) Q_MMS_1Mnt(x,mu_n(n)),x_L,x_R, 'ArrayValued',true)...
           -Q_MMS_j_n(j,n)*0.5*(x_L+x_R); % avg of x
 
         spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
