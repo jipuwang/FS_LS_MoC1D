@@ -11,7 +11,7 @@
 % and pass the grid information to the coupler. 
 
 clear;
-nGrids=6;%10;%8;
+nGrids=4%6;%10;%8;
 refinementRatio=2;
 
 % Geometry
@@ -24,7 +24,7 @@ assumedSoln='sine_sine'; % options: 'const_quadratic','sine_sine'
 error_phi0_n=zeros(nGrids,1);
 error_T_n=zeros(nGrids,1);
 gridMeshSize_n=ones(nGrids,1);
-N=16; % angular discretization, fixed not refined. 
+N=8; % angular discretization, fixed not refined. 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
   gridMeshSize_n(iGrid)=Tau/J;
