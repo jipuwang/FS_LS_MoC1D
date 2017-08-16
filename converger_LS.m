@@ -1,14 +1,14 @@
 %% Instruction
   % to run different cases, change the manufacturer only!
 %% Info
-% Grid refiner is for grid refinement analysis. 
+% Grid refiner is for grid refinement analysis.
 % Right now, it needs to be aware of the geometry and the material. So it
 % can call the manufacturer to get the MMS problem and solution
 % The geometry and material also need to be passed to the coupler, so the
 % coupler can keep passing the info on to the modules, because it's part of
-% the problem description. 
+% the problem description.
 % It needs to know the geometry and is responsible for generating the grid
-% and pass the grid information to the coupler. 
+% and pass the grid information to the coupler.
 function [order_phi]=converger_LS(assumedSoln)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
@@ -29,7 +29,7 @@ end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
-N=8; % angular discretization, fixed not refined. 
+N=8; % angular discretization, fixed not refined.
 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
@@ -43,20 +43,20 @@ for iGrid=1:nGrids
   field5='nuSig_f_j';        value5=ones(J,1)*0.2;
   field6='thermal_cond_k_j'; value6=ones(J,1);
   field7='kappaSig_f_j';     value7=ones(J,1)*0.1; % kappa=1.0;
-  mat = struct(field1,value1,field2,value2,field3,value3,... 
+  mat = struct(field1,value1,field2,value2,field3,value3,...
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=... 
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
         manufacturer_LS(J,N,Tau,mat,assumedSoln);
-      
+
   [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
     psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n);
 
   % Calculate the error compared to manufactured solution
 %   error_ang_j=zeros(J,1);
 % error_ang_j=error_ang_j.*0.0;
-  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J) 
-  
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
+
 %   % Plot the solution
 %   figure(11);
 %   plot(phi0_j,'*-');
@@ -70,13 +70,13 @@ for iGrid=1:nGrids
 %     case 'IHM'
 %       phi0_MMS =@(x) 2.0+0.0*x;
 %   end
-%   
+%
 %   fplot(phi0_MMS,[0,size(phi0_j,1)],'bo-');
 %   legend('numerical','analytical');
 %   title('scalar flux');
 %   xlabel('mesh size [cm]');
 %   ylabel('scalar flux');
-  
+
 end
 % figure(11); hold off;
 
