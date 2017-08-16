@@ -20,12 +20,11 @@ Tau=10;
 
 % Case configure options
 if ~exist('assumedSoln','var')
-%   assumedSoln='sine_sine_sine';
   assumedSoln='constant';
   assumedSoln='linear';
   assumedSoln='quadratic';
-%   assumedSoln='plus1Sqrt';
-%   assumedSoln='other_anisotropic';
+  assumedSoln='plus1Sqrt';
+  assumedSoln='flat_expMu';
 end
 
 error_phi0_n=zeros(nGrids,1);
