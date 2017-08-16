@@ -21,9 +21,9 @@ Tau=10;
 if ~exist('assumedSoln','var')
 %   assumedSoln='sine_sine_sine';
   assumedSoln='constant';
-%   assumedSoln='linear';
-%   assumedSoln='quadratic';
-%   assumedSoln='plus1Sqrt';
+  assumedSoln='linear';
+  assumedSoln='quadratic';
+  assumedSoln='plus1Sqrt';
 %   assumedSoln='other_anisotropic';
 end
 
