@@ -13,6 +13,7 @@ function [order_phi]=converger_FS(assumedSoln)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
+N=2; % angular discretization, fixed not refined. 
 
 % Geometry
 Tau=10; 
@@ -22,14 +23,13 @@ if ~exist('assumedSoln','var')
 %   assumedSoln='sine_sine_sine';
   assumedSoln='constant';
   assumedSoln='linear';
-%   assumedSoln='quadratic';
+  assumedSoln='quadratic';
 %   assumedSoln='plus1Sqrt';
 %   assumedSoln='other_anisotropic';
 end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
-N=8; % angular discretization, fixed not refined. 
 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
@@ -50,7 +50,7 @@ for iGrid=1:nGrids
         manufacturer(J,N,Tau,mat,assumedSoln);
       
   [phi0_j]=MoC_module(J,N,Tau,mat,...
-    psi_b1_n,psi_b2_n,Q_MMS_j_n);
+    psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
 
   % Calculate the error compared to manufactured solution
 %   error_ang_j=zeros(J,1);
@@ -114,13 +114,12 @@ hold off;
 
 % Display the problem description and results
 disp '=================';
-display(assumedSoln);
-display(refinementRatio);
+display(['assumedSoln: ' assumedSoln]);
+display(['refinementRatio: ' num2str(refinementRatio)]);
+display(['quad set order: ' num2str(N)]);
 error_phi0_n
 order_phi_nMinus1
-display(char(strcat('soln_',assumedSoln)));
-display(char(num2str(order_phi_nMinus1(end))));
-
+display(num2str(order_phi_nMinus1(end)));
 order_phi=order_phi_nMinus1(end);
 
 end
