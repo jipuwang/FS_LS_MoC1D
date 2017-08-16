@@ -13,6 +13,7 @@ function [order_phi]=converger_LS(assumedSoln)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
+N=8; % angular discretization, fixed not refined.
 
 % Geometry
 Tau=10;
@@ -29,7 +30,6 @@ end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
-N=8; % angular discretization, fixed not refined.
 
 for iGrid=1:nGrids
   J=5*refinementRatio^iGrid;
