@@ -46,7 +46,7 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=... 
-        manufacturer(J,N,Tau,mat,assumedSoln);
+        manufacturer_FS(J,N,Tau,mat,assumedSoln);
       
   [phi0_j]=MoC_module(J,N,Tau,mat,...
     psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
