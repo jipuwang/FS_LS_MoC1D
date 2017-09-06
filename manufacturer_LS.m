@@ -3,7 +3,7 @@
     % Manufactured boundary conditions
     % Manufactured source
 function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
-          manufacturer_LS(J,N,Tau,mat,assumedSoln,fbType)
+          manufacturer_LS(J,N,Tau,mat,assumedSoln)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
