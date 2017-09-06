@@ -13,7 +13,7 @@ function [order_phi]=converger_FS(assumedSoln)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
-N=2; % angular discretization, fixed not refined. 
+N=8; % angular discretization, fixed not refined. 
 
 % Geometry
 Tau=10; 
@@ -23,8 +23,8 @@ if ~exist('assumedSoln','var')
   assumedSoln='constant';
   assumedSoln='linear';
   assumedSoln='quadratic';
-  assumedSoln='plus1Sqrt';
-  assumedSoln='flat_expMu';
+%   assumedSoln='plus1Sqrt';
+%   assumedSoln='flat_expMu';
 end
 
 error_phi0_n=zeros(nGrids,1);
@@ -106,9 +106,9 @@ loglog(orderPlotGrid,firstOrder,'--');
 loglog(orderPlotGrid,secondOrder,'--');
 loglog(orderPlotGrid,thirdOrder,'--');
 loglog(orderPlotGrid,fourthOrder,'--');
-legend('scalar flux error','1st Order','2nd Order',...
+legend('FS-MoC \phi error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
-hold off;
+% hold off;
 
 
 % Display the problem description and results

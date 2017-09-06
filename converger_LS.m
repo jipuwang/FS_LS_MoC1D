@@ -93,22 +93,22 @@ orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 scalarFluxErrorRMS_plot_handle=figure(13);
 loglog(gridMeshSize_n,error_phi0_n,'*');
 % title('scalar flux error convergence');
-xlabel('mesh size [cm]');
-ylabel('scalar flux error RMS');
+% xlabel('mesh size [cm]');
+% ylabel('scalar flux error RMS');
 
-hold on;
-orderGuess=round(order_phi_nMinus1(end));
-errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
-firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
-secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
-thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
-fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-loglog(orderPlotGrid,firstOrder,'--');
-loglog(orderPlotGrid,secondOrder,'--');
-loglog(orderPlotGrid,thirdOrder,'--');
-loglog(orderPlotGrid,fourthOrder,'--');
-legend('scalar flux error','1st Order','2nd Order',...
-  '3rd Order','4th Order','location','best');
+% hold on;
+% orderGuess=round(order_phi_nMinus1(end));
+% errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
+% firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+% secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+% thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+% fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+% loglog(orderPlotGrid,firstOrder,'--');
+% loglog(orderPlotGrid,secondOrder,'--');
+% loglog(orderPlotGrid,thirdOrder,'--');
+% loglog(orderPlotGrid,fourthOrder,'--');
+legend('FS-MoC \phi error','1st Order','2nd Order',...
+  '3rd Order','4th Order','LS-MoC \phi error','location','best');
 hold off;
 
 
