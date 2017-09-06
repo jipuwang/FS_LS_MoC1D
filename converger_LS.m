@@ -9,9 +9,14 @@
 % the problem description.
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler.
-function [order_phi]=converger_LS(assumedSoln)
+function [error_phi0_n, order_phi_nMinus1]=converger_LS(assumedSoln,nGrids,figureID)
 % clear;
-nGrids=4%8%4%4%6;%10;%8;
+if ~exist('nGrids','var')
+  nGrids=4%8%4%4%6;%10;%8;
+end
+if ~exist('figureID','var')
+  figureID=13;
+end
 refinementRatio=2;
 N=8; % angular discretization, fixed not refined.
 
@@ -90,23 +95,23 @@ end
 %% Visualize the asymptotic convergence
 orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
-scalarFluxErrorRMS_plot_handle=figure(13);
+scalarFluxErrorRMS_plot_handle=figure(figureID);
 loglog(gridMeshSize_n,error_phi0_n,'*');
 % title('scalar flux error convergence');
 % xlabel('mesh size [cm]');
 % ylabel('scalar flux error RMS');
 
 % hold on;
-% orderGuess=round(order_phi_nMinus1(end));
-% errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
-% firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
-% secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
-% thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
-% fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-% loglog(orderPlotGrid,firstOrder,'--');
-% loglog(orderPlotGrid,secondOrder,'--');
-% loglog(orderPlotGrid,thirdOrder,'--');
-% loglog(orderPlotGrid,fourthOrder,'--');
+orderGuess=round(order_phi_nMinus1(end));
+errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+loglog(orderPlotGrid,firstOrder,'--');
+loglog(orderPlotGrid,secondOrder,'--');
+loglog(orderPlotGrid,thirdOrder,'--');
+loglog(orderPlotGrid,fourthOrder,'--');
 legend('FS-MoC \phi error','1st Order','2nd Order',...
   '3rd Order','4th Order','LS-MoC \phi error','location','best');
 hold off;

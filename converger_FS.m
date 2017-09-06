@@ -9,9 +9,15 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [order_phi]=converger_FS(assumedSoln)
+function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids,figureID)
 % clear;
-nGrids=4%8%4%4%6;%10;%8;
+
+if ~exist('nGrids','var')
+  nGrids=4%8%4%4%6;%10;%8;
+end
+if ~exist('figureID','var')
+  figureID=13;
+end
 refinementRatio=2;
 N=8; % angular discretization, fixed not refined. 
 
@@ -89,7 +95,7 @@ end
 %% Visualize the asymptotic convergence
 orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
-scalarFluxErrorRMS_plot_handle=figure(13);
+scalarFluxErrorRMS_plot_handle=figure(figureID);
 loglog(gridMeshSize_n,error_phi0_n,'*');
 % title('scalar flux error convergence');
 xlabel('mesh size [cm]');
