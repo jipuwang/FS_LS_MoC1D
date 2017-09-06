@@ -119,13 +119,12 @@ hold off;
 
 % Display the problem description and results
 disp '=================';
-display(assumedSoln);
-display(refinementRatio);
+display(['assumedSoln: ' assumedSoln]);
+display(['refinementRatio: ' num2str(refinementRatio)]);
+display(['quad set order: ' num2str(N)]);
 error_phi0_n
 order_phi_nMinus1
-display(char(strcat('soln_',assumedSoln)));
-display(char(num2str(order_phi_nMinus1(end))));
-
+display(num2str(order_phi_nMinus1(end)));
 order_phi=order_phi_nMinus1(end);
 
 end
