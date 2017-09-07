@@ -2,25 +2,25 @@
 
 nGrids=8;
 
-assumedSoln='constant';
-figureID=11;
-[error_phi0_n_FS_constant, order_phi_nMinus1_FS_constant]=converger_FS(assumedSoln,nGrids,figureID)
-[error_phi0_n_LS_constant, order_phi_nMinus1_LS_constant]=converger_LS(assumedSoln,nGrids,figureID)
-
-assumedSoln='linear';
-figureID=12;
-[error_phi0_n_FS_linear, order_phi_nMinus1_FS_linear]=converger_FS(assumedSoln,nGrids,figureID)
-[error_phi0_n_LS_linear, order_phi_nMinus1_LS_linear]=converger_LS(assumedSoln,nGrids,figureID)
-
-assumedSoln='quadratic';
-figureID=13;
-[error_phi0_n_FS_quadratic, order_phi_nMinus1_FS_quadratic]=converger_FS(assumedSoln,nGrids,figureID)
-[error_phi0_n_LS_quadratic, order_phi_nMinus1_LS_quadratic]=converger_LS(assumedSoln,nGrids,figureID)
-
-assumedSoln='plus1Sqrt';
-figureID=14;
-[error_phi0_n_FS_plus1Sqrt, order_phi_nMinus1_FS_plus1Sqrt]=converger_FS(assumedSoln,nGrids,figureID)
-[error_phi0_n_LS_plus1Sqrt, order_phi_nMinus1_LS_plus1Sqrt]=converger_LS(assumedSoln,nGrids,figureID)
+% assumedSoln='constant';
+% figureID=11;
+% [error_phi0_n_FS_constant, order_phi_nMinus1_FS_constant]=converger_FS(assumedSoln,nGrids,figureID)
+% [error_phi0_n_LS_constant, order_phi_nMinus1_LS_constant]=converger_LS(assumedSoln,nGrids,figureID)
+% 
+% assumedSoln='linear';
+% figureID=12;
+% [error_phi0_n_FS_linear, order_phi_nMinus1_FS_linear]=converger_FS(assumedSoln,nGrids,figureID)
+% [error_phi0_n_LS_linear, order_phi_nMinus1_LS_linear]=converger_LS(assumedSoln,nGrids,figureID)
+% 
+% assumedSoln='quadratic';
+% figureID=13;
+% [error_phi0_n_FS_quadratic, order_phi_nMinus1_FS_quadratic]=converger_FS(assumedSoln,nGrids,figureID)
+% [error_phi0_n_LS_quadratic, order_phi_nMinus1_LS_quadratic]=converger_LS(assumedSoln,nGrids,figureID)
+% 
+% assumedSoln='plus1Sqrt';
+% figureID=14;
+% [error_phi0_n_FS_plus1Sqrt, order_phi_nMinus1_FS_plus1Sqrt]=converger_FS(assumedSoln,nGrids,figureID)
+% [error_phi0_n_LS_plus1Sqrt, order_phi_nMinus1_LS_plus1Sqrt]=converger_LS(assumedSoln,nGrids,figureID)
 
 % reference solution
 %%
@@ -234,3 +234,63 @@ order_phi_nMinus1_LS_plus1Sqrt =[...
    3.999625595867425
    ];
  
+refinementRatio=2;
+Tau=10;
+for iGrid=1:nGrids
+  J=5*refinementRatio^iGrid;
+  gridMeshSize_n(iGrid)=Tau/J;
+end
+
+nSoln=4;
+close all;
+for iSoln=1:nSoln
+  switch(iSoln)
+    case 1 % constant
+      soln='constant';
+      error_phi0_n_FS=error_phi0_n_FS_constant;
+      order_phi_nMinus1_LS=order_phi_nMinus1_FS_constant;
+      error_phi0_n_LS=error_phi0_n_LS_constant;
+    case 2 % linear
+      soln='linear';
+      error_phi0_n_FS=error_phi0_n_FS_linear;
+      order_phi_nMinus1_LS=order_phi_nMinus1_FS_linear;
+      error_phi0_n_LS=error_phi0_n_LS_linear;
+    case 3 % quadratic
+      soln='quadratic';
+      error_phi0_n_FS=error_phi0_n_FS_quadratic;
+      order_phi_nMinus1_LS=order_phi_nMinus1_FS_quadratic;
+      error_phi0_n_LS=error_phi0_n_LS_quadratic;
+    case 4 % plus1Sqrt
+      soln='plus1Sqrt';
+      error_phi0_n_FS=error_phi0_n_FS_plus1Sqrt;
+      order_phi_nMinus1_LS=order_phi_nMinus1_FS_plus1Sqrt;
+      error_phi0_n_LS=error_phi0_n_LS_plus1Sqrt;
+  end
+    
+  orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
+
+  scalarFluxErrorRMS_plot_handle=figure(iSoln);
+  
+  loglog(gridMeshSize_n,error_phi0_n_FS,'*');
+  hold on;
+  loglog(gridMeshSize_n,error_phi0_n_LS,'*');
+  title({'scalar flux error convergence',['case ' soln]});
+  xlabel('mesh size [cm]');
+  ylabel('scalar flux error RMS');
+  
+  orderGuess=round(order_phi_nMinus1_LS(end));
+  errorStt=error_phi0_n_FS(end)*refinementRatio^(orderGuess*(nGrids-1));
+  firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+  secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+  thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+  fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+  loglog(orderPlotGrid,firstOrder,'--');
+  loglog(orderPlotGrid,secondOrder,'--');
+  loglog(orderPlotGrid,thirdOrder,'--');
+  loglog(orderPlotGrid,fourthOrder,'--');
+  legend('FS-MoC \phi error','LS-MoC \phi error','1st Order','2nd Order',...
+    '3rd Order','4th Order','location','northwest');
+  savefig([soln '(1)']);
+  hold off;
+  
+end
