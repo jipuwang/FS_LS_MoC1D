@@ -248,23 +248,27 @@ for iSoln=1:nSoln
     case 1 % constant
       soln='constant';
       error_phi0_n_FS=error_phi0_n_FS_constant;
-      order_phi_nMinus1_LS=order_phi_nMinus1_FS_constant;
+      order_phi_nMinus1_FS=order_phi_nMinus1_FS_constant;
       error_phi0_n_LS=error_phi0_n_LS_constant;
+      order_phi_nMinus1_LS=order_phi_nMinus1_LS_constant;
     case 2 % linear
       soln='linear';
       error_phi0_n_FS=error_phi0_n_FS_linear;
-      order_phi_nMinus1_LS=order_phi_nMinus1_FS_linear;
+      order_phi_nMinus1_FS=order_phi_nMinus1_FS_linear;
       error_phi0_n_LS=error_phi0_n_LS_linear;
+      order_phi_nMinus1_LS=order_phi_nMinus1_LS_linear;
     case 3 % quadratic
       soln='quadratic';
       error_phi0_n_FS=error_phi0_n_FS_quadratic;
-      order_phi_nMinus1_LS=order_phi_nMinus1_FS_quadratic;
+      order_phi_nMinus1_FS=order_phi_nMinus1_FS_quadratic;
       error_phi0_n_LS=error_phi0_n_LS_quadratic;
+      order_phi_nMinus1_LS=order_phi_nMinus1_LS_quadratic;
     case 4 % plus1Sqrt
       soln='plus1Sqrt';
       error_phi0_n_FS=error_phi0_n_FS_plus1Sqrt;
-      order_phi_nMinus1_LS=order_phi_nMinus1_FS_plus1Sqrt;
+      order_phi_nMinus1_FS=order_phi_nMinus1_FS_plus1Sqrt;
       error_phi0_n_LS=error_phi0_n_LS_plus1Sqrt;
+      order_phi_nMinus1_LS=order_phi_nMinus1_LS_plus1Sqrt;
   end
     
   orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
@@ -278,16 +282,29 @@ for iSoln=1:nSoln
   xlabel('mesh size [cm]');
   ylabel('scalar flux error RMS');
   
-  orderGuess=round(order_phi_nMinus1_LS(end));
+  orderGuess=round(order_phi_nMinus1_FS(end));
   errorStt=error_phi0_n_FS(end)*refinementRatio^(orderGuess*(nGrids-1));
   firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
   secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
   thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
   fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-  loglog(orderPlotGrid,firstOrder,'--');
-  loglog(orderPlotGrid,secondOrder,'--');
-  loglog(orderPlotGrid,thirdOrder,'--');
-  loglog(orderPlotGrid,fourthOrder,'--');
+  loglog(orderPlotGrid,firstOrder,'r--');
+  loglog(orderPlotGrid,secondOrder,'g--');
+  loglog(orderPlotGrid,thirdOrder,'b--');
+  loglog(orderPlotGrid,fourthOrder,'k--');
+
+  % plot the second set of OoA guide lines
+  orderGuess=round(order_phi_nMinus1_LS(end));
+  errorStt=error_phi0_n_LS(end)*refinementRatio^(orderGuess*(nGrids-1));
+  firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+  secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+  thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+  fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+  loglog(orderPlotGrid,firstOrder,'r--');
+  loglog(orderPlotGrid,secondOrder,'g--');
+  loglog(orderPlotGrid,thirdOrder,'b--');
+  loglog(orderPlotGrid,fourthOrder,'k--');
+  
   legend('FS-MoC \phi error','LS-MoC \phi error','1st Order','2nd Order',...
     '3rd Order','4th Order','location','northwest');
   savefig([soln '(1)']);
