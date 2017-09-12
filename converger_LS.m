@@ -83,7 +83,7 @@ for iGrid=1:nGrids
 %   ylabel('scalar flux');
 
 end
-% figure(11); hold off;
+hold off;
 
 % Calculate the order of accuracy
 order_phi_nMinus1=ones(nGrids-1,1);

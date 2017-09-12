@@ -114,7 +114,7 @@ loglog(orderPlotGrid,thirdOrder,'--');
 loglog(orderPlotGrid,fourthOrder,'--');
 legend('FS-MoC \phi error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','northwest');
-% hold off;
+hold off;
 
 
 % Display the problem description and results
