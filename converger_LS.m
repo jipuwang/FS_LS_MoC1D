@@ -25,12 +25,12 @@ Tau=10;
 
 % Case configure options
 if ~exist('assumedSoln','var')
-%   assumedSoln='sine_sine_sine';
+%   assumedSoln='sine-sine-sine';
   assumedSoln='constant';
   assumedSoln='linear';
   assumedSoln='quadratic';
 %   assumedSoln='plus1Sqrt';
-%   assumedSoln='other_anisotropic';
+%   assumedSoln='other-anisotropic';
 end
 
 error_phi0_n=zeros(nGrids,1);
@@ -108,10 +108,10 @@ firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
 secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
 thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
 fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
-loglog(orderPlotGrid,firstOrder,'--');
-loglog(orderPlotGrid,secondOrder,'--');
-loglog(orderPlotGrid,thirdOrder,'--');
-loglog(orderPlotGrid,fourthOrder,'--');
+loglog(orderPlotGrid,firstOrder,'r--');
+loglog(orderPlotGrid,secondOrder,'g--');
+loglog(orderPlotGrid,thirdOrder,'b--');
+loglog(orderPlotGrid,fourthOrder,'k--');
 legend('FS-MoC \phi error','1st Order','2nd Order',...
   '3rd Order','4th Order','LS-MoC \phi error','location','northwest');
 hold off;
