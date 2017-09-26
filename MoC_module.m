@@ -10,8 +10,8 @@
 %   Cell-averaged scalar flux
 
 function [phi0_j]=MoC_module(J,N,Tau,mat,...
-           psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j)
-
+           psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+           error_ang_j,phi0_guess_j)
 %   Input parameter
   if ~exist('Tau','var')
     Tau=10;
@@ -43,7 +43,9 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
   if ~exist('Q_MMS_j_n','var')
     Q_MMS_j_n=ones(J,N)*0.3; % removed *2.0 (angular quantity)
   end
-  
+  if~exist('phi0_guess_j','var')
+    phi0_guess_j=ones(J,1);
+  end
   % Material
   Sig_ss_j=mat.Sig_ss_j;
   nuSig_f_j=mat.nuSig_f_j;
@@ -70,7 +72,7 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
     end
   end
   
-  phi0_j_old=ones(J,1);
+  phi0_old_j=phi0_guess_j;
   q_j_n=zeros(J,N);
   for iIterate=1:maxIterate
     for j=1:J
