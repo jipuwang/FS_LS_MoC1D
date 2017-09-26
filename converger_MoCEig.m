@@ -1,20 +1,20 @@
 %% Instruction
   % to run different cases, change the manufacturer only!
 %% Info
-% Grid refiner is for grid refinement analysis. 
+% Converger is for grid refinement analysis. 
 % Right now, it needs to be aware of the geometry and the material. So it
-% can call the manufacturer to get the MMS problem and solution
-% The geometry and material also need to be passed to the coupler, so the
-% coupler can keep passing the info on to the modules, because it's part of
-% the problem description. 
+% can call the manufacturer to get the MMS problem and reference solution. 
+% The geometry and material also need to be passed to the physics modules, 
+% because it's part of the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [order_phi0]=converger_SnEig(assumedSoln,k_MMS)
+% It also calculates the error and reveal the rate of convergence. 
+function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS)
 % clear;
 nGrids=4%8%4%4%6;%10;%8;
 refinementRatio=2;
 N=2; % angular discretization, fixed not refined. 
-FDM=3;
+
 % Geometry
 Tau=10; 
 
@@ -52,7 +52,7 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess]=... 
-        manufacturer_SnEig(J,N,Tau,mat,assumedSoln,k_MMS);
+        manufacturer_MoCEig(J,N,Tau,mat,assumedSoln,k_MMS);
 
   %%
   error_ang_j=error_ang_j.*0.0;
@@ -62,7 +62,7 @@ for iGrid=1:nGrids
   %%
 
   % Call eigen solver
-  [phi0_j,k]=SnEig_module(FDM,J,N,Tau,mat,...
+  [phi0_j,k]=MoCEig_module(FDM,J,N,Tau,mat,...
     psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
 
   error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
@@ -106,8 +106,8 @@ loglog(orderPlotGrid,fourthOrder,'k--');
 legend('scalar flux error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 hold off;
-savefig(scalarFluxErrorRMS_plot_handle,['temp_SnEig_cellAveraged_phi_convergence_' assumedSoln]);
-% savefig(scalarFluxErrorRMS_plot_handle,['SnEig_Physor2016_cellAveraged_phi_convergence_' assumedSoln]);
+savefig(scalarFluxErrorRMS_plot_handle,['temp_MoCEig_cellAveraged_phi_convergence_' assumedSoln]);
+% savefig(scalarFluxErrorRMS_plot_handle,['MoCEig_Physor2016_cellAveraged_phi_convergence_' assumedSoln]);
 
 kError_plot_handle=figure;
 loglog(gridMeshSize_iGrid,error_k_iGrid,'*');
@@ -130,8 +130,8 @@ loglog(orderPlotGrid,fourthOrder,'k--');
 legend('k error','1st Order','2nd Order',...;
   '3rd Order','4th Order','location','best');
 hold off;
-savefig(kError_plot_handle,['temp_SnEig_Physor2016_k_convergence_' assumedSoln]);
-% savefig(kError_plot_handle,['SnEig_Physor2016_k_convergence_' assumedSoln]);
+savefig(kError_plot_handle,['temp_MoCEig_Physor2016_k_convergence_' assumedSoln]);
+% savefig(kError_plot_handle,['MoCEig_Physor2016_k_convergence_' assumedSoln]);
 
 %% Dispaly the result
 % Display the problem description and results
