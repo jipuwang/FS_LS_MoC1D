@@ -62,7 +62,7 @@ for iGrid=1:nGrids
   %%
 
   % Call eigen solver
-  [phi0_j,k]=MoCEig_module(FDM,J,N,Tau,mat,...
+  [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
     psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
 
   error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
