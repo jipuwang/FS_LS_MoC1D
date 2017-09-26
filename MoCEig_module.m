@@ -9,13 +9,10 @@
 % Output: 
 %   Cell-averaged scalar flux
 
-function [phi0_j,k]=MoCEig_module(FDM,J,N,Tau,mat,...
+function [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n,...
            error_ang_j,phi0_guess_j,k_guess)
 %   Input parameter
-  if ~exist('FDM','var')
-    FDM=3;
-  end
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
   end
@@ -71,18 +68,6 @@ function [phi0_j,k]=MoCEig_module(FDM,J,N,Tau,mat,...
   h_j=ones(J,1)*Tau/J;
   h=Tau/J;
 
-  % Spatial discretization Method
-  switch FDM
-    case 1 % Step: Step Method; Upwind; Implicit;Step; 
-      alpha_n=ones(N,1);
-      alpha_n(1:N/2)=-1;
-    case 2 % DD: Diamond Differencing;
-      alpha_n=zeros(N,1);
-    case 3 % SC: Step Characteristic;
-      tao_n=h./mu_n;
-      alpha_n=coth(0.5*tao_n)-2./tao_n;
-  end % switch FDM
-
   % Initial guess
   phi0_old_outer_j=phi0_guess_j;
   k_old=k_guess;
@@ -99,7 +84,7 @@ function [phi0_j,k]=MoCEig_module(FDM,J,N,Tau,mat,...
       FixedSrc_j_n(:,n)=F_j*0.5+Q_MMS_j_n(:,n);
     end
     % call fixed source solver
-    [phi0_new_outer_j]=Sn_module(FDM,J,N,Tau,mat,...
+    [phi0_new_outer_j]=MoC_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,FixedSrc_j_n,error_ang_j,phi0_old_outer_j);
     % Be really careful here!!! The initial guess is going to be stripped
     % of the angular error in the Sn_module.  You should not do it here. 
