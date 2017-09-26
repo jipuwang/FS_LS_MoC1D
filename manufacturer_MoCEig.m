@@ -45,9 +45,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_gues
   h=Tau/J;
   [mu_n,weight_n]=lgwt(N,-1,1); mu_n=flipud(mu_n);
   
-  %% Manufactured Solutions for both fields
-  % Options includes: assumedSoln='constant'; 'linear'; 'quadratic';
-  % 'plus1Sqrt'; 'other_anisotropic';
+  %% Manufactured Solutions 
 
   switch(assumedSoln)
     case('constant')
