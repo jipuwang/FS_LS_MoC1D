@@ -139,7 +139,6 @@ disp '=================';
 display(['assumedSoln: ' assumedSoln]);
 display(['Number of grids: ' num2str(nGrids)]);
 display(['refinementRatio: ' num2str(refinementRatio)]);
-display(['FDM method: ' num2str(FDM)]);
 display(['quad set order: ' num2str(N)]);
 
 error_phi0_iGrid
