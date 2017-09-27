@@ -77,7 +77,7 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
   for iIterate=1:maxIterate
     for j=1:J
       for n=1:N
-        q_j_n(j,n)=(Sig_ss_j(j))*(phi0_j_old(j)-error_ang_j(j))*0.5+Q_MMS_j_n(j,n);
+        q_j_n(j,n)=(Sig_ss_j(j))*(phi0_old_j(j)-error_ang_j(j))*0.5+Q_MMS_j_n(j,n);
       end
     end
     phi0_j_new=zeros(J,1);
@@ -104,12 +104,11 @@ function [phi0_j]=MoC_module(J,N,Tau,mat,...
     end
 
     % test for convergence
-%     error=norm(phi0_j_new-phi0_j_old);
-    error=max(abs(phi0_j_new-phi0_j_old)./(phi0_j_new+delta));
+    error=max(abs(phi0_j_new-phi0_old_j)./(phi0_j_new+delta));
     if error<epsilon_phi0
       break;
     end
-    phi0_j_old=phi0_j_new;
+    phi0_old_j=phi0_j_new;
   end  
 
   phi0_j=phi0_j_new;
