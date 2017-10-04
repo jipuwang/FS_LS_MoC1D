@@ -29,6 +29,7 @@ if ~exist('assumedSoln','var')
   assumedSoln='quadratic';
   assumedSoln='plus1Sqrt';
   assumedSoln='flat-expMu';
+  assumedSoln='cubic-expMu';
 end
 
 error_phi0_n=zeros(nGrids,1);

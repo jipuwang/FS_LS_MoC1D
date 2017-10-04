@@ -55,7 +55,7 @@ for iGrid=1:nGrids
         manufacturer_MoCEig(J,N,Tau,mat,assumedSoln,k_MMS);
 
   %%
-  error_ang_j=error_ang_j.*0.0;
+%   error_ang_j=error_ang_j.*0.0;
 %   Q_MMS_j_n=Q_MMS_j_n*0.0;
 %   k_guess=1.0;
 %   phi0_guess_j=ones(J,1);
