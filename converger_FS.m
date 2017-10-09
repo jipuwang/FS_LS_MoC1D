@@ -13,11 +13,11 @@ function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids)
 % clear;
 
 if ~exist('nGrids','var')
-  nGrids=4%8%4%4%6;%10;%8;
+  nGrids=6%8%4%4%6;%10;%8;
 end
 
-refinementRatio=4;
-N=2; % angular discretization, fixed not refined. 
+refinementRatio=2;
+N=4; % angular discretization, fixed not refined. 
 
 % Geometry
 Tau=10; 
