@@ -26,7 +26,7 @@ Tau=10;
 if ~exist('assumedSoln','var')
   assumedSoln='constant';
   assumedSoln='linear-expMu';
-  assumedSoln='quadratic-expMU';
+  assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
   assumedSoln='flat-expMu';
   assumedSoln='cubic-expMu';
