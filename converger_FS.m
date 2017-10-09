@@ -9,19 +9,8 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids)
+function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids,refinementRatio,N)
 % clear;
-
-if ~exist('nGrids','var')
-  nGrids=6%8%4%4%6;%10;%8;
-end
-
-refinementRatio=2;
-N=4; % angular discretization, fixed not refined. 
-
-% Geometry
-Tau=10; 
-
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='constant';
@@ -31,6 +20,18 @@ if ~exist('assumedSoln','var')
   assumedSoln='flat-expMu';
   assumedSoln='cubic-expMu';
 end
+if ~exist('nGrids','var')
+  nGrids=6%8%4%4%6;%10;%8;
+end
+if ~exist('refinementRatio','var')
+    refinementRatio=2;
+end
+if ~exist('N','var')
+    N=4; % angular discretization, fixed not refined. 
+end
+
+% Geometry
+Tau=10; 
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
