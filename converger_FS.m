@@ -16,7 +16,7 @@ if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
 end
 
-refinementRatio=2;
+refinementRatio=4;
 N=2; % angular discretization, fixed not refined. 
 
 % Geometry
@@ -25,9 +25,9 @@ Tau=10;
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='constant';
-  assumedSoln='linear';
-  assumedSoln='quadratic';
-  assumedSoln='plus1Sqrt';
+  assumedSoln='linear-expMu';
+  assumedSoln='quadratic-expMU';
+  assumedSoln='plus1Sqrt-expMu';
   assumedSoln='flat-expMu';
   assumedSoln='cubic-expMu';
 end
@@ -52,13 +52,15 @@ for iGrid=1:nGrids
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=... 
         manufacturer_FS(J,N,Tau,mat,assumedSoln);
-      
+
+% For use of no angular error removal
+% error_ang_j=error_ang_j.*0.0;
   [phi0_j]=MoC_module(J,N,Tau,mat,...
-    psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
+    psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0);
 
   % Calculate the error compared to manufactured solution
-%   error_ang_j=zeros(J,1);
-% error_ang_j=error_ang_j.*0.0;
+  % For parital angular error removal
+%   error_ang_j=error_ang_j.*0.0;
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J) 
   
 %   % Plot the solution
