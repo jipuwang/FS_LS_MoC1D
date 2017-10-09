@@ -73,16 +73,17 @@ for iGrid=1:nGrids
 
   % Call eigen solver
   if strcmp(angErrorRemoval,'no')
-      error_ang_j=error_ang_j*0.0;
+    error_ang_j=error_ang_j*0.0;
+    [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'partial')
-      [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
-        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0,phi0_guess_j,k_guess);
-  elseif strcmp(angErrorRemoval,'complete')
-      [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
-        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
-  else
-      exit(14);
+    [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0,phi0_guess_j,k_guess);
+  end
+  if strcmp(angErrorRemoval,'complete')
+    [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
   end
 
   error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
