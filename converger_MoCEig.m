@@ -9,27 +9,32 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 % It also calculates the error and reveal the rate of convergence. 
-function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS)
+function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS,nGrids,refinementRatio,N)
 % clear;
-nGrids=4%8%4%4%6;%10;%8;
-refinementRatio=2;
-N=2; % angular discretization, fixed not refined. 
-
-% Geometry
-Tau=10; 
-
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='constant';
   assumedSoln='linear-expMu';
   assumedSoln='quadratic-expMu';
-  assumedSoln='plus1Sqrt';
+  assumedSoln='plus1Sqrt-expMu';
   assumedSoln='flat-expMu';
   assumedSoln='sine-complex';
 end
 if ~exist('k_MMS','var')
   k_MMS=1.02;
 end
+if ~exist('nGrids','var')
+  nGrids=6%8%4%4%6;%10;%8;
+end
+if ~exist('refinementRatio','var')
+    refinementRatio=2;
+end
+if ~exist('N','var')
+    N=4; % angular discretization, fixed not refined. 
+end
+
+% Geometry
+Tau=10; 
 
 gridMeshSize_iGrid=zeros(nGrids,1);
 error_phi0_iGrid=zeros(nGrids,1);
