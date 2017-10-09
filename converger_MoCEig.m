@@ -10,7 +10,7 @@
 % and pass the grid information to the coupler. 
 % It also calculates the error and reveal the rate of convergence. 
 function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS,nGrids,refinementRatio,N,angErrorRemoval)
-% clear;
+format long;
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='constant';

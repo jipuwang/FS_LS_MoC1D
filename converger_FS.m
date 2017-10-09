@@ -9,8 +9,8 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids,refinementRatio,N)
-% clear;
+function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids,refinementRatio,N,angErrorRemoval)
+format long;
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='constant';
@@ -28,6 +28,11 @@ if ~exist('refinementRatio','var')
 end
 if ~exist('N','var')
     N=4; % angular discretization, fixed not refined. 
+end
+if ~exist('angErrorRemoval','var')
+    angErrorRemoval='complete';
+%     angErrorRemoval='partial';
+%     angErrorRemoval='no';
 end
 
 % Geometry
@@ -54,35 +59,21 @@ for iGrid=1:nGrids
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=... 
         manufacturer_FS(J,N,Tau,mat,assumedSoln);
 
-% For use of no angular error removal
-% error_ang_j=error_ang_j.*0.0;
-  [phi0_j]=MoC_module(J,N,Tau,mat,...
-    psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0);
-
-  % Calculate the error compared to manufactured solution
-  % For parital angular error removal
-%   error_ang_j=error_ang_j.*0.0;
-  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J) 
+  if strcmp(angErrorRemoval,'no')
+      error_ang_j=error_ang_j*0.0;
+  end
+  if strcmp(angErrorRemoval,'partial')
+      [phi0_j]=MoC_module(J,N,Tau,mat,...
+        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0);
+  elseif strcmp(angErrorRemoval,'complete')
+      [phi0_j]=MoC_module(J,N,Tau,mat,...
+        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
+  else
+      exit(14);
+  end
   
-%   % Plot the solution
-%   figure(11);
-%   plot(phi0_j,'*-');
-%   hold on;
-%   grid on;
-%   switch assumedSoln
-%     case 'sine_sine_sine'
-%       phi0_MMS =@(x) (sin(pi/(size(phi0_j,1)).*x)+1)*4.090350086939905;
-%     case 'sine_exp_exp'
-%       phi0_MMS =@(x) (sin(pi/(size(phi0_j,1)).*x)+1)*37.102114262431876;
-%     case 'IHM'
-%       phi0_MMS =@(x) 2.0+0.0*x;
-%   end
-%   
-%   fplot(phi0_MMS,[0,size(phi0_j,1)],'bo-');
-%   legend('numerical','analytical');
-%   title('scalar flux');
-%   xlabel('mesh size [cm]');
-%   ylabel('scalar flux');
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
+  
   
 end
 % figure(11); hold off;
