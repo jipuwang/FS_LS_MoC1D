@@ -9,7 +9,7 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 % It also calculates the error and reveal the rate of convergence. 
-function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS,nGrids,refinementRatio,N)
+function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS,nGrids,refinementRatio,N,angErrorRemoval)
 % clear;
 % Case configure options
 if ~exist('assumedSoln','var')
@@ -31,6 +31,11 @@ if ~exist('refinementRatio','var')
 end
 if ~exist('N','var')
     N=4; % angular discretization, fixed not refined. 
+end
+if ~exist('angErrorRemoval','var')
+    angErrorRemoval='complete';
+%     angErrorRemoval='partial';
+%     angErrorRemoval='no';
 end
 
 % Geometry
@@ -67,8 +72,18 @@ for iGrid=1:nGrids
   %%
 
   % Call eigen solver
-  [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
-    psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
+  if strcmp(angErrorRemoval,'no')
+      error_ang_j=error_ang_j*0.0;
+  end
+  if strcmp(angErrorRemoval,'partial')
+      [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0,phi0_guess_j,k_guess);
+  elseif strcmp(angErrorRemoval,'complete')
+      [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
+  else
+      exit(14);
+  end
 
   error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
   error_k_iGrid(iGrid)=k*(sum(mat.nuSig_f_j.*(phi0_j-error_ang_j))*Tau/J)...
