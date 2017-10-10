@@ -14,11 +14,11 @@ format long;
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='constant';
+  assumedSoln='flat-expMu';
   assumedSoln='linear-expMu';
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
-  assumedSoln='flat-expMu';
-  assumedSoln='sine-complex';
+%   assumedSoln='sine-complex';
 end
 if ~exist('k_MMS','var')
   k_MMS=1.02;
