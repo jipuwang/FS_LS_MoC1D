@@ -1,9 +1,68 @@
 % Annals paper Plotter
-%% Problem discription
+%% Source problem plot
 soln='quadratic-expMu';
 % refinementRatio to be assigned later
 % nGrids: to be assigned later
-%% The eigenvalue plot
+format long E
+%read in data
+err_phi0_ij=[
+1.00000000000000E+00	1.62529973659790E-02	1.81531494415858E+00	1.62528322242600E-02	1.81535215202695E+00	1.62527259639710E-02	1.81537646100834E+00
+5.00000000000000E-01	4.61816255070300E-03	1.94566681176064E+00	4.61799652486100E-03	1.94581502834053E+00	4.61788852190600E-03	1.94591164500739E+00
+2.50000000000000E-01	1.19885081622400E-03	1.98493616823559E+00	1.19868456251600E-03	1.98553452228191E+00	1.19857625757000E-03	1.98592181737740E+00
+1.25000000000000E-01	3.02858534965000E-04	1.99239813927759E+00	3.02690968946000E-04	1.99488195992667E+00	3.02582379957000E-04	1.99644678853423E+00
+6.25000000000000E-02	7.61146428600000E-05	1.98127038253395E+00	7.59416721950000E-05	1.99260246257148E+00	7.58321320290000E-05	1.99910963568855E+00
+3.12500000000000E-02	1.92773085770000E-05	1.90583515244349E+00	1.90830173510000E-05	1.96998481834086E+00	1.89697366350000E-05	1.99977727255795E+00
+1.56250000000000E-02	5.14437775500000E-06	1.47522905188379E+00	4.87104928600000E-06	1.83454345375622E+00	4.74316636600000E-06	1.99994427783208E+00
+7.81250000000000E-03	1.85031068400000E-06	5.40698862966571E-01	1.36574593300000E-06	1.19812423535575E+00	1.18583739200000E-06	1.99998594098755E+00
+3.90625000000000E-03	1.27197354900000E-06	9.73483295549306E-02	5.95248874000000E-07	3.31524405670576E-01	2.96462237000000E-07	1.99999607284447E+00
+1.95312500000000E-03	1.18897661500000E-06	0.00000000000000E+00	4.73042098000000E-07	0.00000000000000E+00	7.41157610000000E-08	0.00000000000000E+00
+  ];
+
+gridMeshSize_n=err_phi0_ij(:,1);
+nGrids=size(gridMeshSize_n,1)
+refinementRatio=gridMeshSize_n(1)/gridMeshSize_n(2);
+
+err_phi0_no_aer=err_phi0_ij(:,2);
+err_phi0_partial_aer=err_phi0_ij(:,4);
+err_phi0_complete_aer=err_phi0_ij(:,6);
+
+% the correct OoA
+order_phi0_complete_aer=err_phi0_ij(:,7);
+
+% plot for phi0
+orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
+
+scalarFluxErrorRMS_plot_handle=figure;
+
+loglog(gridMeshSize_n,err_phi0_no_aer,'r*');
+hold on;
+loglog(gridMeshSize_n,err_phi0_partial_aer,'bx');
+loglog(gridMeshSize_n,err_phi0_complete_aer,'ko');
+
+title({'scalar flux error convergence',[soln ' case']});
+xlabel('mesh size [cm]');
+ylabel('scalar flux error RMS');
+
+orderGuess=round(order_phi0_complete_aer(end-1)); % -1 because I've got an spurious zero.
+errorStt=err_phi0_complete_aer(end)*refinementRatio^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+loglog(orderPlotGrid,firstOrder,'r--');
+loglog(orderPlotGrid,secondOrder,'g--');
+loglog(orderPlotGrid,thirdOrder,'b--');
+loglog(orderPlotGrid,fourthOrder,'k--');
+
+legend('no AER','parital AER','complete AER','1st Order','2nd Order',...
+  '3rd Order','4th Order','location','best');
+savefig([soln '_temp_phi0_MoC_AnnalsMMS1D2017']);
+hold off;
+
+%% The eigenvalue problem plot
+soln='plus1Sqrt-expMu';
+% refinementRatio to be assigned later
+% nGrids: to be assigned later
 format long E
 %read in data
 err_phi0_ij=[
@@ -71,7 +130,6 @@ loglog(orderPlotGrid,secondOrder,'g--');
 loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 
-
 legend('no AER','parital AER','complete AER','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 savefig([soln '_temp_phi0_MoCEign_AnnalsMMS1D2017']);
@@ -102,11 +160,9 @@ loglog(orderPlotGrid,secondOrder,'g--');
 loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 
-
 legend('no AER','parital AER','complete AER','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
 savefig([soln '_temp_k_MoCEign_AnnalsMMS1D2017']);
 hold off;
-
 
 %%
