@@ -21,7 +21,7 @@ if ~exist('assumedSoln','var')
   assumedSoln='cubic-expMu';
 end
 if ~exist('nGrids','var')
-  nGrids=6%8%4%4%6;%10;%8;
+  nGrids=4%8%4%4%6;%10;%8;
 end
 if ~exist('refinementRatio','var')
     refinementRatio=2;
@@ -108,6 +108,7 @@ loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('FS-MoC \phi error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','northwest');
+savefig([assumedSoln '_' num2str(nGrids) 'grids_' 'refinementRatio' num2str(refinementRatio) '_N' num2str(N) '_AER' angErrorRemoval '_phi0_MoC']);
 hold off;
 
 
