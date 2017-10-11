@@ -89,7 +89,7 @@ orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
 scalarFluxErrorRMS_plot_handle=figure;
 loglog(gridMeshSize_n,error_phi0_n,'*');
-title({'scalar flux error convergence',[soln ' case']});
+title({'scalar flux error convergence',[assumedSoln ' case']});
 xlabel('mesh size [cm]');
 ylabel('scalar flux error RMS');
 
