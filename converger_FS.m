@@ -75,9 +75,7 @@ for iGrid=1:nGrids
   
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
   
-  
 end
-% figure(11); hold off;
 
 % Calculate the order of accuracy
 order_phi_nMinus1=ones(nGrids-1,1);
@@ -112,7 +110,6 @@ savefig(scalarFluxErrorRMS_plot_handle,[assumedSoln '_' num2str(nGrids) 'grids_'
   num2str(refinementRatio) '_N' num2str(N) '_AER' ...
   angErrorRemoval '_phi0_MoC']);
 hold off;
-
 
 % Display the problem description and results
 disp '=================';
