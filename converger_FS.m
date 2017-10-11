@@ -91,7 +91,7 @@ orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
 scalarFluxErrorRMS_plot_handle=figure;
 loglog(gridMeshSize_n,error_phi0_n,'*');
-% title('scalar flux error convergence');
+title({'scalar flux error convergence',[soln ' case']});
 xlabel('mesh size [cm]');
 ylabel('scalar flux error RMS');
 
@@ -107,8 +107,10 @@ loglog(orderPlotGrid,secondOrder,'g--');
 loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('FS-MoC \phi error','1st Order','2nd Order',...
-  '3rd Order','4th Order','location','northwest');
-savefig([assumedSoln '_' num2str(nGrids) 'grids_' 'refinementRatio' num2str(refinementRatio) '_N' num2str(N) '_AER' angErrorRemoval '_phi0_MoC']);
+  '3rd Order','4th Order','location','best');
+savefig(scalarFluxErrorRMS_plot_handle,[assumedSoln '_' num2str(nGrids) 'grids_' 'refinementRatio' ...
+  num2str(refinementRatio) '_N' num2str(N) '_AER' ...
+  angErrorRemoval '_phi0_MoC']);
 hold off;
 
 
