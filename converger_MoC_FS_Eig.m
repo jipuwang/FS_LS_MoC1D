@@ -9,15 +9,15 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 % It also calculates the error and reveal the rate of convergence. 
-function [order_phi0]=converger_MoCEig(assumedSoln,k_MMS,nGrids,refinementRatio,N,angErrorRemoval)
+function [order_phi0]=converger_MoC_FS_Eig(assumedSoln,k_MMS,nGrids,refinementRatio,N,angErrorRemoval)
 format long;
 % Case configure options
 if ~exist('assumedSoln','var')
-  assumedSoln='constant';
-  assumedSoln='flat-expMu';
-  assumedSoln='linear-expMu';
-  assumedSoln='quadratic-expMu';
-  assumedSoln='plus1Sqrt-expMu';
+  assumedSoln='const-const';
+%   assumedSoln='flat-expMu';
+%   assumedSoln='linear-expMu';
+%   assumedSoln='quadratic-expMu';
+%   assumedSoln='plus1Sqrt-expMu';
 %   assumedSoln='sine-complex';
 end
 if ~exist('k_MMS','var')
@@ -62,7 +62,7 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess]=... 
-        manufacturer_MoCEig(J,N,Tau,mat,assumedSoln,k_MMS);
+        manufacturer_MoC_FS_Eig(J,N,Tau,mat,assumedSoln,k_MMS);
 
   %%
 %   error_ang_j=error_ang_j.*0.0;
@@ -74,15 +74,15 @@ for iGrid=1:nGrids
   % Call eigen solver
   if strcmp(angErrorRemoval,'no')
     error_ang_j=error_ang_j*0.0;
-    [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+    [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'partial')
-    [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+    [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'complete')
-    [phi0_j,k]=MoCEig_module(J,N,Tau,mat,...
+    [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
   end
 

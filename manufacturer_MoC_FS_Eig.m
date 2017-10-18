@@ -3,7 +3,7 @@
     % Manufactured boundary conditions
     % Manufactured source
 function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess]=...
-          manufacturer_MoCEig(J,N,Tau,mat,assumedSoln,k_MMS)
+          manufacturer_MoC_FS_Eig(J,N,Tau,mat,assumedSoln,k_MMS)
   % input parameters
   if ~exist('J','var')
     J=5*2;%*2%*2*2*2*2*2*2*2*2
@@ -48,7 +48,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_gues
   %% Manufactured Solutions 
 
   switch(assumedSoln)
-    case('constant')
+    case('const-const')
       % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
       psi_MMS =@(x,mu) (1.0+0.0*x).*(1.0+0.0*mu);
       psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*(1.0+0.0*mu);
