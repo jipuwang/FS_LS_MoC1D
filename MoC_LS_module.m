@@ -10,8 +10,8 @@
 %   Cell-averaged scalar flux
 
 function [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
-       psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n)
-
+           psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
+           error_ang_j)
 %   Input parameter
   if ~exist('Tau','var')
   Tau=10;
@@ -88,7 +88,7 @@ q_sm_hat_j_n=zeros(J,N);
 for iIterate=1:maxIterate
   for j=1:J
     for n=1:N
-      Q_x_j_n(j,n)=0.5*(Sig_ss_j(j))*phi0_old_j(j)+Q_MMS_j_n(j,n);
+      Q_x_j_n(j,n)=0.5*(Sig_ss_j(j))*(phi0_old_j(j)-error_ang_j(j))+Q_MMS_j_n(j,n);
       q_j_n(j,n)=Q_x_j_n(j,n);
       q_sm_j_n(j,n)=q_j_n(j,n);
 
