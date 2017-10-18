@@ -13,12 +13,12 @@ function [error_phi0_n, order_phi_nMinus1]=converger_MoC_LS(assumedSoln,nGrids,r
 format long;
 % Case configure options
 if ~exist('assumedSoln','var')
-  assumedSoln='flat-expMu';
-  assumedSoln='const-const';
-  assumedSoln='linear-expMu';
-  assumedSoln='quadratic-expMu';
-  assumedSoln='cubic-expMu';
-  assumedSoln='plus1Sqrt-expMu';
+  assumedSoln='const-expMu';
+%   assumedSoln='const-const';
+%   assumedSoln='linear-expMu';
+%   assumedSoln='quadratic-expMu';
+%   assumedSoln='cubic-expMu';
+%   assumedSoln='plus1Sqrt-expMu';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
@@ -27,7 +27,7 @@ if ~exist('refinementRatio','var')
     refinementRatio=2;
 end
 if ~exist('N','var')
-    N=8; % angular discretization, fixed not refined. 
+    N=2; % angular discretization, fixed not refined. 
 end
 if ~exist('angErrorRemoval','var')
     angErrorRemoval='complete';

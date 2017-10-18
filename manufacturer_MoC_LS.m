@@ -47,21 +47,22 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
 
   switch(assumedSoln)
     case('const-const')
-      % Manufactured neutronics solution \psi(x,\mu)=sin(pi*x/Tau), 0<x<Tau
       psi_MMS =@(x,mu) (1.0+0.0*x).*(1.0+0.0*mu);
       psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*(1.0+0.0*mu);
     case('linear-expMu')
       psi_MMS =@(x,mu) 1.0+x.*exp(mu);
       psi_MMS_Diff =@(x,mu) (1.0+x*0.0).*exp(mu);
     case('quadratic-expMu')
-      % Manufactured neutronics solution \psi(x,\mu)=1.0, 0<x<Tau
       psi_MMS =@(x,mu) 1.0+x.*x.*exp(mu);
       psi_MMS_Diff =@(x,mu) (2*x).*exp(mu);
     case('plus1Sqrt-expMu')
       psi_MMS =@(x,mu) sqrt(x+1).*exp(mu);
       psi_MMS_Diff =@(x,mu) 0.5./sqrt(x+1).*exp(mu);
-    case('other-anisotropic')
-      display('not defined cases');
+    case('const-expMu')
+      psi_MMS =@(x,mu) (1.0+0.0*x).*exp(mu);
+      psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*exp(mu);
+    otherwise
+      error('Un-defined cases!');
   end
   
   Sig_gamma =@(x) Sig_gamma_j(1)+0.0*x;
