@@ -24,13 +24,13 @@ if ~exist('k_MMS','var')
   k_MMS=1.02;
 end
 if ~exist('nGrids','var')
-  nGrids=6%8%4%4%6;%10;%8;
+  nGrids=4%8%4%4%6;%10;%8;
 end
 if ~exist('refinementRatio','var')
     refinementRatio=2;
 end
 if ~exist('N','var')
-    N=4; % angular discretization, fixed not refined. 
+    N=2; % angular discretization, fixed not refined. 
 end
 if ~exist('angErrorRemoval','var')
     angErrorRemoval='complete';
