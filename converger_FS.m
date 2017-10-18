@@ -13,12 +13,12 @@ function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids,refin
 format long;
 % Case configure options
 if ~exist('assumedSoln','var')
-  assumedSoln='constant';
+  assumedSoln='flat-expMu';
+  assumedSoln='const-const';
   assumedSoln='linear-expMu';
   assumedSoln='quadratic-expMu';
-  assumedSoln='plus1Sqrt-expMu';
-  assumedSoln='flat-expMu';
   assumedSoln='cubic-expMu';
+  assumedSoln='plus1Sqrt-expMu';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
@@ -27,7 +27,7 @@ if ~exist('refinementRatio','var')
     refinementRatio=2;
 end
 if ~exist('N','var')
-    N=4; % angular discretization, fixed not refined. 
+    N=2; % angular discretization, fixed not refined. 
 end
 if ~exist('angErrorRemoval','var')
     angErrorRemoval='complete';
@@ -57,19 +57,19 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=... 
-        manufacturer_FS(J,N,Tau,mat,assumedSoln);
+        manufacturer_MoC_FS(J,N,Tau,mat,assumedSoln);
 
   if strcmp(angErrorRemoval,'no')
       error_ang_j=error_ang_j*0.0;
-      [phi0_j]=MoC_module(J,N,Tau,mat,...
+      [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
         psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
   end
   if strcmp(angErrorRemoval,'partial')
-      [phi0_j]=MoC_module(J,N,Tau,mat,...
+      [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
         psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0);
   end
   if strcmp(angErrorRemoval,'complete')
-      [phi0_j]=MoC_module(J,N,Tau,mat,...
+      [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
         psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
   end
   
