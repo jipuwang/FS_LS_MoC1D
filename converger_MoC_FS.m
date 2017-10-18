@@ -9,7 +9,7 @@
 % the problem description. 
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
-function [error_phi0_n, order_phi_nMinus1]=converger_FS(assumedSoln,nGrids,refinementRatio,N,angErrorRemoval)
+function [error_phi0_n, order_phi_nMinus1]=converger_MoC_FS(assumedSoln,nGrids,refinementRatio,N,angErrorRemoval)
 format long;
 % Case configure options
 if ~exist('assumedSoln','var')
