@@ -9,27 +9,34 @@
 % the problem description.
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler.
-function [error_phi0_n, order_phi_nMinus1]=converger_LS(assumedSoln,nGrids)
-% clear;
+function [error_phi0_n, order_phi_nMinus1]=converger_MoC_LS(assumedSoln,nGrids,refinementRatio,N,angErrorRemoval)
+format long;
+% Case configure options
+if ~exist('assumedSoln','var')
+  assumedSoln='flat-expMu';
+  assumedSoln='const-const';
+  assumedSoln='linear-expMu';
+  assumedSoln='quadratic-expMu';
+  assumedSoln='cubic-expMu';
+  assumedSoln='plus1Sqrt-expMu';
+end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
 end
-
-refinementRatio=2;
-N=8; % angular discretization, fixed not refined.
+if ~exist('refinementRatio','var')
+    refinementRatio=2;
+end
+if ~exist('N','var')
+    N=8; % angular discretization, fixed not refined. 
+end
+if ~exist('angErrorRemoval','var')
+    angErrorRemoval='complete';
+%     angErrorRemoval='partial';
+%     angErrorRemoval='no';
+end
 
 % Geometry
 Tau=10;
-
-% Case configure options
-if ~exist('assumedSoln','var')
-%   assumedSoln='sine-sine-sine';
-  assumedSoln='constant';
-  assumedSoln='linear';
-  assumedSoln='quadratic';
-%   assumedSoln='plus1Sqrt';
-%   assumedSoln='other-anisotropic';
-end
 
 error_phi0_n=zeros(nGrids,1);
 gridMeshSize_n=zeros(nGrids,1);
@@ -50,7 +57,7 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
-        manufacturer_LS(J,N,Tau,mat,assumedSoln);
+        manufacturer_MoC_LS(J,N,Tau,mat,assumedSoln);
 
   [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
     psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n);
