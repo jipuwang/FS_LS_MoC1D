@@ -11,7 +11,7 @@
 
 function [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
-           error_ang_j)
+           error_ang_j,error_hat_ang_j)
 %   Input parameter
   if ~exist('Tau','var')
   Tau=10;
@@ -92,7 +92,7 @@ for iIterate=1:maxIterate
       q_j_n(j,n)=Q_x_j_n(j,n);
       q_sm_j_n(j,n)=q_j_n(j,n);
 
-      Q_x_hat_j_n(j,n)=0.5*(Sig_ss_j(j))*phi0_old_hat_j(j)+Q_MMS_hat_j_n(j,n); 
+      Q_x_hat_j_n(j,n)=0.5*(Sig_ss_j(j))*(phi0_old_hat_j(j)-error_hat_ang_j(j))+Q_MMS_hat_j_n(j,n); 
       q_hat_j_n(j,n)=Q_x_hat_j_n(j,n)/(h_j(j)*h_j(j)/12);
       q_sm_hat_j_n(j,n)=q_hat_j_n(j,n)*(mu_n(n));   % NO ABS IS NEEDED!
     end
