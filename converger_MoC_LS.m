@@ -14,11 +14,11 @@ format long;
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='const-expMu';
-  assumedSoln='const-const';
-  assumedSoln='linear-expMu';
-  assumedSoln='quadratic-expMu';
-  assumedSoln='cubic-expMu';
-  assumedSoln='plus1Sqrt-expMu';
+%   assumedSoln='const-const';
+%   assumedSoln='linear-expMu';
+%   assumedSoln='quadratic-expMu';
+%   assumedSoln='cubic-expMu';
+%   assumedSoln='plus1Sqrt-expMu';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
@@ -58,7 +58,8 @@ for iGrid=1:nGrids
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j]=...
         manufacturer_MoC_LS(J,N,Tau,mat,assumedSoln);
-
+  
+%   error_hat_ang_j=error_hat_ang_j*0.0;
   [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
     psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j);
 
@@ -103,9 +104,9 @@ hold off;
 
 % Display the problem description and results
 disp '=================';
-display(['assumedSoln: ' assumedSoln]);
-display(['Number of grids: ' num2str(nGrids)]);
-display(['refinementRatio: ' num2str(refinementRatio)]);
+display(['assumed soln: ' assumedSoln]);
+display(['number of grids: ' num2str(nGrids)]);
+display(['refinement ratio: ' num2str(refinementRatio)]);
 display(['quad set order: ' num2str(N)]);
 error_phi0_n
 order_phi_nMinus1
