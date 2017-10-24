@@ -101,7 +101,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error
   for j=1:J
     x_L=(j-1)*h;x_R=j*h;
     phi0_MMS_j(j)=1/h*integral(phi0_MMS,x_L,x_R, 'ArrayValued',true);
-    phi0_hat_MMS_j(j)=1/h*integral(@(x) x.*phi0_MMS(x),x_L,x_R, 'ArrayValued',true);
+    phi0_hat_MMS_j(j)=1/h*integral(@(x) (x-(x_L+x_R)*0.5).*phi0_MMS(x),x_L,x_R, 'ArrayValued',true);
     numSum=0;
     numSum_hat=0;
     for n=1:N
@@ -111,7 +111,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error
           -Q_MMS_j_n(j,n)*0.5*(x_L+x_R); % avg of x
 
         psi_spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
-        psi_hat_spatialAvg=1/h*integral(@(x) x.*psi_MMS(x,mu_n(n)),x_L,x_R);
+        psi_hat_spatialAvg=1/h*integral(@(x) (x-(x_L+x_R)*0.5).*psi_MMS(x,mu_n(n)),x_L,x_R);
         numSum=numSum+weight_n(n)*psi_spatialAvg;
         numSum_hat=numSum_hat+weight_n(n)*psi_hat_spatialAvg;
     end % n
