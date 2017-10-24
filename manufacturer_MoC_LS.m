@@ -2,7 +2,7 @@
     % Discretized analytical solution
     % Manufactured boundary conditions
     % Manufactured source
-function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
+function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j]=...
           manufacturer_MoC_LS(J,N,Tau,mat,assumedSoln)
   % input parameters
   if ~exist('J','var')
@@ -92,24 +92,31 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j]=...
   end
   
   phi0_MMS_j=zeros(J,1);
+  phi0_hat_MMS_j=zeros(J,1);
   Q_MMS_j_n=zeros(J,N);
   Q_MMS_hat_j_n=zeros(J,N);
   error_ang_j=ones(J,1);
+  error_hat_ang_j=ones(J,1);
 
   for j=1:J
     x_L=(j-1)*h;x_R=j*h;
     phi0_MMS_j(j)=1/h*integral(phi0_MMS,x_L,x_R, 'ArrayValued',true);
+    phi0_hat_MMS_j(j)=1/h*integral(@(x) x.*phi0_MMS(x),x_L,x_R, 'ArrayValued',true);
     numSum=0;
+    numSum_hat=0;
     for n=1:N
         Q_MMS_j_n(j,n)= ...
           1/h*integral(@(x) Q_MMS(x,mu_n(n)),x_L,x_R, 'ArrayValued',true);
         Q_MMS_hat_j_n(j,n)= 1/h*integral(@(x) Q_MMS_1Mnt(x,mu_n(n)),x_L,x_R, 'ArrayValued',true)...
           -Q_MMS_j_n(j,n)*0.5*(x_L+x_R); % avg of x
 
-        spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
-        numSum=numSum+weight_n(n)*spatialAvg;
+        psi_spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
+        psi_hat_spatialAvg=1/h*integral(@(x) x.*psi_MMS(x,mu_n(n)),x_L,x_R);
+        numSum=numSum+weight_n(n)*psi_spatialAvg;
+        numSum_hat=numSum_hat+weight_n(n)*psi_hat_spatialAvg;
     end % n
     error_ang_j(j)=numSum-phi0_MMS_j(j);
+    error_hat_ang_j(j)=numSum_hat-phi0_hat_MMS_j(j);
   end % j
 
 end
