@@ -2,7 +2,10 @@
     % Discretized analytical solution
     % Manufactured boundary conditions
     % Manufactured source
-function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess]=...
+function [phi0_MMS_j,...
+  psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
+  error_ang_j,error_hat_ang_j,...
+  phi0_guess_j,k_guess]=...
           manufacturer_MoC_LS_Eig(J,N,Tau,mat,assumedSoln,k_MMS)
   % input parameters
   if ~exist('J','var')
@@ -98,6 +101,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error
   end
   
   phi0_MMS_j=zeros(J,1);
+  phi0_hat_MMS_j=zeros(J,1);
   Q_MMS_j_n=zeros(J,N);
   Q_MMS_hat_j_n=zeros(J,N);
   error_ang_j=ones(J,1);
