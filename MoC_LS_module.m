@@ -9,9 +9,9 @@
 % Output: 
 %   Cell-averaged scalar flux
 
-function [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
+function [phi0_j,phi0_hat_j]=MoC_LS_module(J,N,Tau,mat,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
-           error_ang_j,error_hat_ang_j)
+           error_ang_j,error_hat_ang_j,phi0_old_outer_j,phi0_hat_old_outer_j)
 %   Input parameter
   if ~exist('Tau','var')
   Tau=10;
@@ -73,8 +73,8 @@ function [phi0_j]=MoC_LS_module(J,N,Tau,mat,...
   end
 
 % From copy and paste
-phi0_old_j=ones(1,J)*1.0; % so the 1st dimension is consistently the angle. 
-phi0_old_hat_j=ones(1,J)*1.0; % so the 1st dimension is consistently the angle. 
+phi0_old_j=phi0_old_outer_j;%ones(1,J)*1.0; % so the 1st dimension is consistently the angle. 
+phi0_old_hat_j=phi0_hat_old_outer_j;%ones(1,J)*1.0; % so the 1st dimension is consistently the angle. 
 
 Q_x_j_n=zeros(J,N); % these are actually angular quantities, already have 0.5's in them.
 q_j_n=zeros(J,N);
@@ -101,8 +101,8 @@ for iIterate=1:maxIterate
 %   q_n_j
 %   q_n_j_hat
 
-  phi0_new_j=zeros(1,J);
-  phi0_hat_new_j=zeros(1,J);
+  phi0_new_j=zeros(J,1);
+  phi0_hat_new_j=zeros(J,1);
   % ray tracing
   for n=N/2+1:N
     psi_in=psi_b1_n(n);
@@ -158,12 +158,12 @@ for iIterate=1:maxIterate
 end
 % error
 % phi_j_old=phi_j_new;
-phi0_new_j=phi0_new_j';
 % display(iIterate);
 % figure(19);
 % plot(phi0_new_j,'*-')
 % openvar('phi_j_new')
 
   phi0_j=phi0_new_j;
+  phi0_hat_j=phi0_hat_new_j;
   
 end
