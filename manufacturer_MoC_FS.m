@@ -66,6 +66,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=...
     case('cubic-expMu')
       psi_MMS =@(x,mu) x.*x.*x.*exp(mu);
       psi_MMS_Diff =@(x,mu) (3*x.*x).*exp(mu);
+    case('inSeparable')
+      psi_MMS =@(x,mu) exp(x./(mu+2));
+      psi_MMS_Diff =@(x,mu) 1./(mu+2).*exp(x./(mu+2));
   end
   
   Sig_gamma =@(x) Sig_gamma_j(1)+0.0*x;
@@ -78,7 +81,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=...
   phi0_MMS =@(x) integral(@(mu) psi_MMS(x,mu), -1,1);
   % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
   % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
-  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
+  Q_MMS =@(x,mu) mu.*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
     -(Sig_ss(x))*0.5.*phi0_MMS(x);
   
   %% For MoC MMS solution and problem
