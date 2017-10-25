@@ -9,7 +9,8 @@
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler. 
 % It also calculates the error and reveal the rate of convergence. 
-function [order_phi0]=converger_MoC_LS_Eig(assumedSoln,k_MMS,nGrids,refinementRatio,N,angErrorRemoval)
+function [order_phi0]=...
+  converger_MoC_LS_Eig(assumedSoln,k_MMS,nGrids,refinementRatio,N,angErrorRemoval)
 format long;
 % Case configure options
 if ~exist('assumedSoln','var')
