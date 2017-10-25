@@ -61,7 +61,7 @@ for iGrid=1:nGrids
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess]=... 
+  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess]=... 
         manufacturer_MoC_LS_Eig(J,N,Tau,mat,assumedSoln,k_MMS);
 
   %%
@@ -75,15 +75,15 @@ for iGrid=1:nGrids
   if strcmp(angErrorRemoval,'no')
     error_ang_j=error_ang_j*0.0;
     [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
-      psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess);
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'partial')
     [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
-      psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0,error_hat_ang_j*0.0,phi0_guess_j,k_guess);
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j*0.0,error_hat_ang_j*0.0,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'complete')
     [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
-      psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess);
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess);
   end
 
   error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
