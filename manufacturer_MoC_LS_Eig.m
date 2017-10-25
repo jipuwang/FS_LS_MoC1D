@@ -2,7 +2,7 @@
     % Discretized analytical solution
     % Manufactured boundary conditions
     % Manufactured source
-function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess]=...
+function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess]=...
           manufacturer_MoC_LS_Eig(J,N,Tau,mat,assumedSoln,k_MMS)
   % input parameters
   if ~exist('J','var')
@@ -27,7 +27,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_gues
       field4,value4,field5,value5,field6,value6,field7,value7);
   end
   if ~exist('assumedSoln','var')
-    assumedSoln='constant';
+    assumedSoln='plus1Sqrt-expMu';
   end
   if ~exist('k_MMS','var')
     k_MMS=1.02;
@@ -81,7 +81,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_gues
   phi0_MMS =@(x) integral(@(mu) psi_MMS(x,mu), -1,1);
   % MMS source: mu_n * derivative(psi_MMS) +Sig_t* psi_MMS ...
   % -(Sig_ss+nuSig_f/k)*0.5*phi0_MMS;
-  Q_MMS =@(x,mu) mu*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
+  Q_MMS =@(x,mu) mu.*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
     -(Sig_ss(x)+nuSig_f(x)/k_MMS)*0.5.*phi0_MMS(x);
   
   %% For MoC MMS solution and problem
@@ -100,18 +100,24 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_gues
   phi0_MMS_j=zeros(J,1);
   Q_MMS_j_n=zeros(J,N);
   error_ang_j=ones(J,1);
-
+  error_hat_ang_j=ones(J,1);
+  
   for j=1:J
     x_L=(j-1)*h;x_R=j*h;
     phi0_MMS_j(j)=1/h*integral(phi0_MMS,x_L,x_R, 'ArrayValued',true);
+    phi0_hat_MMS_j(j)=1/h*integral(@(x) (x-(x_L+x_R)*0.5).*phi0_MMS(x),x_L,x_R, 'ArrayValued',true);
     numSum=0;
+    numSum_hat=0;
     for n=1:N
         Q_MMS_j_n(j,n)= ...
           1/h*integral(@(x) Q_MMS(x,mu_n(n)),x_L,x_R, 'ArrayValued',true);
-        spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
-        numSum=numSum+weight_n(n)*spatialAvg;
+        psi_spatialAvg=1/h*integral(@(x) psi_MMS(x,mu_n(n)),x_L,x_R);
+        psi_hat_spatialAvg=1/h*integral(@(x) (x-(x_L+x_R)*0.5).*psi_MMS(x,mu_n(n)),x_L,x_R);
+        numSum=numSum+weight_n(n)*psi_spatialAvg;
+        numSum_hat=numSum_hat+weight_n(n)*psi_hat_spatialAvg;
     end % n
     error_ang_j(j)=numSum-phi0_MMS_j(j);
+    error_hat_ang_j(j)=numSum_hat-phi0_hat_MMS_j(j);
   end % j
 
   % Determine the phi0_guess_j and k_guess
