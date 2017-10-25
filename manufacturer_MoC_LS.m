@@ -49,6 +49,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error
     case('const-const')
       psi_MMS =@(x,mu) (1.0+0.0*x).*(1.0+0.0*mu);
       psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*(1.0+0.0*mu);
+    case('flat-expMu')
+      psi_MMS =@(x,mu) (1.0+0.0*x).*exp(mu);
+      psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*exp(mu);
     case('linear-expMu')
       psi_MMS =@(x,mu) 1.0+x.*exp(mu);
       psi_MMS_Diff =@(x,mu) (1.0+x*0.0).*exp(mu);
@@ -58,13 +61,13 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error
     case('plus1Sqrt-expMu')
       psi_MMS =@(x,mu) sqrt(x+1).*exp(mu);
       psi_MMS_Diff =@(x,mu) 0.5./sqrt(x+1).*exp(mu);
-    case('const-expMu')
-      psi_MMS =@(x,mu) (1.0+0.0*x).*exp(mu);
-      psi_MMS_Diff =@(x,mu) (0.0+0.0*x).*exp(mu);
-    case('inSeparable')
+    case('sine-complex')
+      psi_MMS =@(x,mu) sin(pi*x/Tau).*exp(cos(mu.*mu));
+      psi_MMS_Diff =@(x,mu) pi/Tau*cos(pi*x/Tau)*exp(cos(mu.*mu));
+    case('inSeparableDivision')
       psi_MMS =@(x,mu) exp(x./(mu+2));
       psi_MMS_Diff =@(x,mu) 1./(mu+2).*exp(x./(mu+2));
-    case('inSeparable2')
+    case('inSeparableAddition')
       psi_MMS =@(x,mu) exp(x*0.1)+exp(mu);
       psi_MMS_Diff =@(x,mu) 0.1*exp(x*0.1).*(1.0+0.0*mu);
     otherwise
