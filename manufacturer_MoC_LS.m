@@ -83,7 +83,7 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error
   % -(Sig_ss+nuSig_f)*0.5*phi0_MMS;
   Q_MMS =@(x,mu) mu.*psi_MMS_Diff(x,mu) +Sig_t(x).*psi_MMS(x,mu) ...
     -(Sig_ss(x))*0.5.*phi0_MMS(x);
-  Q_MMS_1Mnt= @(x,mu) Q_MMS(x,mu).*x;  
+  Q_MMS_1Mnt =@(x,mu) Q_MMS(x,mu).*x;  
   %% For MoC MMS solution and problem
   % Boundary condition and source
   psi_b1_n=zeros(N,1);
