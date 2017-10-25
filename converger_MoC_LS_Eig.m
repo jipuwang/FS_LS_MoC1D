@@ -62,7 +62,7 @@ for iGrid=1:nGrids
     field4,value4,field5,value5,field6,value6,field7,value7);
 
   [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess]=... 
-        manufacturer_MoC_FS_Eig(J,N,Tau,mat,assumedSoln,k_MMS);
+        manufacturer_MoC_LS_Eig(J,N,Tau,mat,assumedSoln,k_MMS);
 
   %%
 %   error_ang_j=error_ang_j.*0.0;
@@ -74,15 +74,15 @@ for iGrid=1:nGrids
   % Call eigen solver
   if strcmp(angErrorRemoval,'no')
     error_ang_j=error_ang_j*0.0;
-    [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
+    [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'partial')
-    [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
+    [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0,phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'complete')
-    [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
+    [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j,phi0_guess_j,k_guess);
   end
 
