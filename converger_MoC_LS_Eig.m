@@ -18,7 +18,9 @@ if ~exist('assumedSoln','var')
   assumedSoln='linear-expMu';
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
-%   assumedSoln='sine-complex';
+  assumedSoln='sine-complex';
+  assumedSoln='inSeparableDivision';
+  assumedSoln='inSeparableAddition';
 end
 if ~exist('k_MMS','var')
   k_MMS=1.02;
@@ -27,15 +29,15 @@ if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
 end
 if ~exist('refinementRatio','var')
-    refinementRatio=2;
+  refinementRatio=2;
 end
 if ~exist('N','var')
-    N=2; % angular discretization, fixed not refined. 
+  N=2; % angular discretization 
 end
 if ~exist('angErrorRemoval','var')
-    angErrorRemoval='complete';
-%     angErrorRemoval='partial';
-%     angErrorRemoval='no';
+  angErrorRemoval='no';
+  angErrorRemoval='partial';
+  angErrorRemoval='complete';
 end
 
 % Geometry

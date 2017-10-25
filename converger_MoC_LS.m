@@ -9,32 +9,33 @@
 % the problem description.
 % It needs to know the geometry and is responsible for generating the grid
 % and pass the grid information to the coupler.
-function [error_phi0_n, order_phi_nMinus1]=converger_MoC_LS(assumedSoln,nGrids,refinementRatio,N,angErrorRemoval)
+function [error_phi0_n, order_phi_nMinus1]=....
+  converger_MoC_LS(assumedSoln,nGrids,refinementRatio,N,angErrorRemoval)
 format long;
 % Case configure options
 if ~exist('assumedSoln','var')
-  assumedSoln='const-expMu';
-%   assumedSoln='const-const';
-%   assumedSoln='linear-expMu';
-%   assumedSoln='quadratic-expMu';
-%   assumedSoln='cubic-expMu';
-%   assumedSoln='plus1Sqrt-expMu';
-  assumedSoln='inSeparable';
-  assumedSoln='inSeparable2';
+  assumedSoln='const-const';
+  assumedSoln='flat-expMu';
+  assumedSoln='linear-expMu';
+  assumedSoln='quadratic-expMu';
+  assumedSoln='plus1Sqrt-expMu';
+  assumedSoln='sine-complex';
+  assumedSoln='inSeparableDivision';
+  assumedSoln='inSeparableAddition';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
 end
 if ~exist('refinementRatio','var')
-    refinementRatio=2;
+  refinementRatio=2;
 end
 if ~exist('N','var')
-    N=2; % angular discretization, fixed not refined. 
+  N=2; % angular discretization 
 end
 if ~exist('angErrorRemoval','var')
-    angErrorRemoval='complete';
-%     angErrorRemoval='partial';
-%     angErrorRemoval='no';
+  angErrorRemoval='no';
+  angErrorRemoval='partial';
+  angErrorRemoval='complete';
 end
 
 % Geometry
