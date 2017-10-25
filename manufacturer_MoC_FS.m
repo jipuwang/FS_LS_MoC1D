@@ -69,6 +69,9 @@ function [phi0_MMS_j,psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j]=...
     case('inSeparable')
       psi_MMS =@(x,mu) exp(x./(mu+2));
       psi_MMS_Diff =@(x,mu) 1./(mu+2).*exp(x./(mu+2));
+    case('inSeparable2')
+      psi_MMS =@(x,mu) exp(x*0.1)+exp(mu);
+      psi_MMS_Diff =@(x,mu) 0.1*exp(x*0.1).*(1.0+0.0*mu);
   end
   
   Sig_gamma =@(x) Sig_gamma_j(1)+0.0*x;

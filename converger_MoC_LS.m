@@ -19,6 +19,8 @@ if ~exist('assumedSoln','var')
 %   assumedSoln='quadratic-expMu';
 %   assumedSoln='cubic-expMu';
 %   assumedSoln='plus1Sqrt-expMu';
+  assumedSoln='inSeparable';
+  assumedSoln='inSeparable2';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
