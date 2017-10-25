@@ -14,10 +14,10 @@ format long;
 % Case configure options
 if ~exist('assumedSoln','var')
   assumedSoln='const-const';
-%   assumedSoln='flat-expMu';
-%   assumedSoln='linear-expMu';
-%   assumedSoln='quadratic-expMu';
-%   assumedSoln='plus1Sqrt-expMu';
+  assumedSoln='flat-expMu';
+  assumedSoln='linear-expMu';
+  assumedSoln='quadratic-expMu';
+  assumedSoln='plus1Sqrt-expMu';
 %   assumedSoln='sine-complex';
 end
 if ~exist('k_MMS','var')
@@ -61,32 +61,34 @@ for iGrid=1:nGrids
   mat = struct(field1,value1,field2,value2,field3,value3,... 
     field4,value4,field5,value5,field6,value6,field7,value7);
 
-  [phi0_j_ana,psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess]=... 
+  [phi0_MMS_j,...
+    psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
+    error_ang_j,error_hat_ang_j,...
+    phi0_guess_j,k_guess]=... 
         manufacturer_MoC_LS_Eig(J,N,Tau,mat,assumedSoln,k_MMS);
-
-  %%
-%   error_ang_j=error_ang_j.*0.0;
-%   Q_MMS_j_n=Q_MMS_j_n*0.0;
-%   k_guess=1.0;
-%   phi0_guess_j=ones(J,1);
-  %%
-
+  
   % Call eigen solver
   if strcmp(angErrorRemoval,'no')
     error_ang_j=error_ang_j*0.0;
     [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
-      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess);
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
+      error_ang_j,error_hat_ang_j,...
+      phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'partial')
     [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
-      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j*0.0,error_hat_ang_j*0.0,phi0_guess_j,k_guess);
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
+      error_ang_j*0.0,error_hat_ang_j*0.0,...
+      phi0_guess_j,k_guess);
   end
   if strcmp(angErrorRemoval,'complete')
     [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
-      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,error_ang_j,error_hat_ang_j,phi0_guess_j,k_guess);
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
+      error_ang_j,error_hat_ang_j,...
+      phi0_guess_j,k_guess);
   end
 
-  error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
+  error_phi0_iGrid(iGrid)=norm(phi0_j-phi0_MMS_j-error_ang_j,2)/sqrt(J)
   error_k_iGrid(iGrid)=k*(sum(mat.nuSig_f_j.*(phi0_j-error_ang_j))*Tau/J)...
     /(sum(mat.nuSig_f_j.*(phi0_j))*Tau/J)...
     -k_MMS
