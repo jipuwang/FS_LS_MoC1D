@@ -11,7 +11,8 @@
 
 function [phi0_j,phi0_hat_j]=MoC_LS_module(J,N,Tau,mat,...
            psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
-           error_ang_j,error_hat_ang_j,phi0_old_outer_j,phi0_hat_old_outer_j)
+           error_ang_j,error_hat_ang_j,...
+           phi0_old_outer_j,phi0_hat_old_outer_j)
 %   Input parameter
   if ~exist('Tau','var')
   Tau=10;
@@ -41,10 +42,16 @@ function [phi0_j,phi0_hat_j]=MoC_LS_module(J,N,Tau,mat,...
     psi_b2_n=ones(N,1)*1.0;
   end
   if ~exist('Q_MMS_j_n','var')
-    Q_MMS_j_n=ones(J,N)*0.3; % removed *2.0 (angular quantity)
+    Q_MMS_j_n=ones(J,N)*0.3; 
   end
   if ~exist('Q_MMS_hat_j_n','var')
-    Q_MMS_hat_j_n=ones(J,N)*0.1; % removed *2.0 (angular quantity)
+    Q_MMS_hat_j_n=ones(J,N)*0.1; 
+  end
+  if ~exist('phi0_old_outer_j','var')
+    phi0_old_outer_j=ones(J,1); 
+  end
+  if ~exist('phi0_hat_old_outer_j','var')
+    phi0_hat_old_outer_j=ones(J,1); 
   end
   
   % Material
