@@ -63,21 +63,24 @@ for iGrid=1:nGrids
         manufacturer_MoC_FS(J,N,Tau,mat,assumedSoln);
 
   if strcmp(angErrorRemoval,'no')
-      error_ang_j=error_ang_j*0.0;
-      [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
-        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
+    error_ang_j=error_ang_j*0.0;
+    [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+      error_ang_j);
   end
   if strcmp(angErrorRemoval,'partial')
-      [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
-        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j*0.0);
+    [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+      error_ang_j*0.0);
   end
   if strcmp(angErrorRemoval,'complete')
-      [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
-        psi_b1_n,psi_b2_n,Q_MMS_j_n,error_ang_j);
+    [phi0_j]=MoC_FS_module(J,N,Tau,mat,...
+      psi_b1_n,psi_b2_n,Q_MMS_j_n,...
+      error_ang_j);
   end
-  
+
   error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
-  
+
 end
 
 % Calculate the order of accuracy
