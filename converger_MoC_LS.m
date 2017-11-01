@@ -19,9 +19,9 @@ if ~exist('assumedSoln','var')
   assumedSoln='linear-expMu';
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
-  assumedSoln='sine-complex';
-  assumedSoln='inSeparableDivision';
-  assumedSoln='inSeparableAddition';
+%   assumedSoln='sine-complex';
+%   assumedSoln='inSeparableDivision';
+%   assumedSoln='inSeparableAddition';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;

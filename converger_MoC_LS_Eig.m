@@ -19,9 +19,9 @@ if ~exist('assumedSoln','var')
   assumedSoln='linear-expMu';
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
-  assumedSoln='sine-complex';
-  assumedSoln='inSeparableDivision';
-  assumedSoln='inSeparableAddition';
+%   assumedSoln='sine-complex';
+%   assumedSoln='inSeparableDivision';
+%   assumedSoln='inSeparableAddition';
 end
 if ~exist('k_MMS','var')
   k_MMS=1.02;
