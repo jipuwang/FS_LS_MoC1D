@@ -79,7 +79,7 @@ for iGrid=1:nGrids
       error_ang_j);
   end
 
-  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J)
 
 end
 
