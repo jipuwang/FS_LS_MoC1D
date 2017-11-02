@@ -81,8 +81,9 @@ for iGrid=1:nGrids
       psi_b1_n,psi_b2_n,Q_MMS_j_n,Q_MMS_hat_j_n,...
       error_ang_j,error_hat_ang_j);
   end
-
-  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana-error_ang_j,2)/sqrt(J)
+  
+  % Now the converged solutino out of MoC_LS_module is angular-error-free
+  error_phi0_n(iGrid)=norm(phi0_j-phi0_j_ana,2)/sqrt(J)
 
 end
 
