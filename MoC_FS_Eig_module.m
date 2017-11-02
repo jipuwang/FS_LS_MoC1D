@@ -71,6 +71,7 @@ function [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
   % Initial guess
   phi0_old_outer_j=phi0_guess_j;
   k_old=k_guess;
+  
   % Initialization
   isOuterConverged=false;
   F_j=zeros(J,1);   % to store fixed fission source
@@ -86,9 +87,9 @@ function [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
     % call fixed source solver
     [phi0_new_outer_j]=MoC_FS_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,FixedSrc_j_n,error_ang_j,phi0_old_outer_j);
-    % Be really careful here!!! The initial guess is going to be stripped
-    % of the angular error in the Sn_module.  You should not do it here. 
-    % update eigenvalue
+    % Note that the phi0_new_outer_j already has the angular error removed. 
+    % It is the angular-error-free scalar flux. 
+    % Now get the angular-error-free k. 
     k_new=k_old*(sum(nuSig_f_j.*phi0_new_outer_j)*h)/(sum(nuSig_f_j.*phi0_old_outer_j)*h);
     %%
 %     figure(111);hold on;
