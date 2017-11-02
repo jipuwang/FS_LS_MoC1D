@@ -154,7 +154,8 @@ for iIterate=1:maxIterate
       psi_in=psi_out;
     end
   end
-  
+  phi0_new_j=phi0_new_j-error_ang_j;
+  phi0_hat_new_j=phi0_old_hat_j-error_hat_ang_j;
   % test for convergence
   error=norm(phi0_new_j-phi0_old_j);
   if error<epsilon_phi0
