@@ -94,16 +94,10 @@ function [phi0_j,k]=MoC_LS_Eig_module(J,N,Tau,mat,...
     % call fixed source solver
     [phi0_new_outer_j,phi0_hat_new_outer_j]=MoC_LS_module(J,N,Tau,mat,...
       psi_b1_n,psi_b2_n,fixedSrc_j_n,fixedSrc_hat_j_n,error_ang_j,error_hat_ang_j,phi0_old_outer_j,phi0_hat_old_outer_j);
-    % Be really careful here!!! The initial guess is going to be stripped
-    % of the angular error in the Sn_module.  You should not do it here. 
-    % update eigenvalue
+    % Note that MoC_LS_module gives the angular-error-free flux moments. 
+    % Calculate the angular-error-free k. 
     k_new=k_old*(sum(nuSig_f_j.*phi0_new_outer_j)*h)/(sum(nuSig_f_j.*phi0_old_outer_j)*h);
-    %%
-%     figure(111);hold on;
-%     plot(phi0_new_outer_j);
-%     drawnow;
-    
-    %%
+
     % check convergence
     if max(abs(phi0_new_outer_j-phi0_old_outer_j)./ ...
         (phi0_new_outer_j+delta)) < epsilon_phi0 ...
