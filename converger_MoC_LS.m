@@ -116,6 +116,12 @@ loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('FS-MoC \phi error','1st Order','2nd Order',...
   '3rd Order','4th Order','LS-MoC \phi error','location','northwest');
+
+set(get(gca,'xlabel'),'FontName','Times New Roman');
+set(get(gca,'ylabel'),'FontName','Times New Roman');
+set(get(gca,'title'),'FontName','Times New Roman');
+set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
 hold off;
 
 

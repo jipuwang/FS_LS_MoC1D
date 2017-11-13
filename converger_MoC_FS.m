@@ -115,6 +115,12 @@ legend('FS-MoC \phi error','1st Order','2nd Order',...
 savefig(scalarFluxErrorRMS_plot_handle,[assumedSoln '_' num2str(nGrids) 'grids_' 'refinementRatio' ...
   num2str(refinementRatio) '_N' num2str(N) '_AER' ...
   angErrorRemoval '_phi0_MoC']);
+
+set(get(gca,'xlabel'),'FontName','Times New Roman');
+set(get(gca,'ylabel'),'FontName','Times New Roman');
+set(get(gca,'title'),'FontName','Times New Roman');
+set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
 hold off;
 
 % Display the problem description and results

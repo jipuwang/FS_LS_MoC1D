@@ -131,6 +131,12 @@ loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('scalar flux error','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
+
+set(get(gca,'xlabel'),'FontName','Times New Roman');
+set(get(gca,'ylabel'),'FontName','Times New Roman');
+set(get(gca,'title'),'FontName','Times New Roman');
+set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
 hold off;
 savefig(scalarFluxErrorRMS_plot_handle,['temp_MoCEig_cellAveraged_phi_convergence_' assumedSoln]);
 % savefig(scalarFluxErrorRMS_plot_handle,['MoCEig_Physor2016_cellAveraged_phi_convergence_' assumedSoln]);
@@ -155,6 +161,12 @@ loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
 legend('k error','1st Order','2nd Order',...;
   '3rd Order','4th Order','location','best');
+
+set(get(gca,'xlabel'),'FontName','Times New Roman');
+set(get(gca,'ylabel'),'FontName','Times New Roman');
+set(get(gca,'title'),'FontName','Times New Roman');
+set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
 hold off;
 savefig(kError_plot_handle,['temp_MoCEig_Physor2016_k_convergence_' assumedSoln]);
 % savefig(kError_plot_handle,['MoCEig_Physor2016_k_convergence_' assumedSoln]);
