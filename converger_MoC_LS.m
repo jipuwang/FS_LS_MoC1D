@@ -103,7 +103,7 @@ loglog(gridMeshSize_n,error_phi0_n,'*');
 % xlabel('mesh size [cm]');
 % ylabel('scalar flux error RMS');
 
-% hold on;
+hold on;
 orderGuess=round(order_phi_nMinus1(end));
 errorStt=error_phi0_n(end)*refinementRatio^(orderGuess*(nGrids-1));
 firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
