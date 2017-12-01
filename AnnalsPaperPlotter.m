@@ -132,6 +132,12 @@ loglog(orderPlotGrid,fourthOrder,'k--');
 
 legend('no AER','parital AER','complete AER','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
+
+% set(get(gca,'xlabel'),'FontName','Times New Roman');
+% set(get(gca,'ylabel'),'FontName','Times New Roman');
+% set(get(gca,'title'),'FontName','Times New Roman');
+% set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
 savefig([soln '_temp_phi0_MoCEign_AnnalsMMS1D2017']);
 hold off;
 
@@ -162,6 +168,12 @@ loglog(orderPlotGrid,fourthOrder,'k--');
 
 legend('no AER','parital AER','complete AER','1st Order','2nd Order',...
   '3rd Order','4th Order','location','best');
+
+% set(get(gca,'xlabel'),'FontName','Times New Roman');
+% set(get(gca,'ylabel'),'FontName','Times New Roman');
+% set(get(gca,'title'),'FontName','Times New Roman');
+% set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
 savefig([soln '_temp_k_MoCEign_AnnalsMMS1D2017']);
 hold off;
 
