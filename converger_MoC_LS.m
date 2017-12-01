@@ -20,8 +20,8 @@ if ~exist('assumedSoln','var')
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
 %   assumedSoln='sine-complex';
-%   assumedSoln='inSeparableDivision';
-%   assumedSoln='inSeparableAddition';
+  assumedSoln='nonSeparableDivision';
+%   assumedSoln='nonSeparableAddition';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
@@ -99,9 +99,9 @@ orderPlotGrid=[gridMeshSize_n(1) gridMeshSize_n(end)];
 
 scalarFluxErrorRMS_plot_handle=figure;
 loglog(gridMeshSize_n,error_phi0_n,'*');
-% title('scalar flux error convergence');
-% xlabel('mesh size [cm]');
-% ylabel('scalar flux error RMS');
+title({'scalar flux error convergence',[assumedSoln ' case']});
+xlabel('mesh size [cm]');
+ylabel('RMS error of scalar flux');
 
 hold on;
 orderGuess=round(order_phi_nMinus1(end));
@@ -114,8 +114,8 @@ loglog(orderPlotGrid,firstOrder,'r--');
 loglog(orderPlotGrid,secondOrder,'g--');
 loglog(orderPlotGrid,thirdOrder,'b--');
 loglog(orderPlotGrid,fourthOrder,'k--');
-legend('FS-MoC \phi error','1st Order','2nd Order',...
-  '3rd Order','4th Order','LS-MoC \phi error','location','northwest');
+legend('scalar flux error','1st Order','2nd Order',...
+  '3rd Order','4th Order','location','northwest');
 
 set(get(gca,'xlabel'),'FontName','Times New Roman');
 set(get(gca,'ylabel'),'FontName','Times New Roman');

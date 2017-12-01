@@ -20,8 +20,8 @@ if ~exist('assumedSoln','var')
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
 %   assumedSoln='sine-complex';
-%   assumedSoln='inSeparableDivision';
-%   assumedSoln='inSeparableAddition';
+%   assumedSoln='nonSeparableDivision';
+%   assumedSoln='nonSeparableAddition';
 end
 if ~exist('k_MMS','var')
   k_MMS=1.02;
@@ -112,7 +112,7 @@ loglog(gridMeshSize_iGrid,error_phi0_iGrid,'*');
 title({'cell-averaged scalar flux error convergence',...
   ['\phi_{MMS}: ' assumedSoln '; k_{MMS}: ' num2str(k_MMS)]});
 xlabel('mesh size [cm]');
-ylabel('cell-averaged scalar flux error RMS');
+ylabel('RMS error of scalar flux');
 
 hold on;
 orderGuess=round(order_phi0_nMinus1(end));

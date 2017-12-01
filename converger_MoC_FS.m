@@ -20,8 +20,8 @@ if ~exist('assumedSoln','var')
   assumedSoln='quadratic-expMu';
   assumedSoln='plus1Sqrt-expMu';
 %   assumedSoln='sine-complex';
-%   assumedSoln='inSeparableDivision';
-%   assumedSoln='inSeparableAddition';
+%   assumedSoln='nonSeparableDivision';
+%   assumedSoln='nonSeparableAddition';
 end
 if ~exist('nGrids','var')
   nGrids=4%8%4%4%6;%10;%8;
@@ -97,7 +97,7 @@ scalarFluxErrorRMS_plot_handle=figure;
 loglog(gridMeshSize_n,error_phi0_n,'*');
 title({'scalar flux error convergence',[assumedSoln ' case']});
 xlabel('mesh size [cm]');
-ylabel('scalar flux error RMS');
+ylabel('RMS error of scalar flux');
 
 hold on;
 orderGuess=round(order_phi_nMinus1(end));
