@@ -27,13 +27,13 @@ if ~exist('k_MMS','var')
   k_MMS=1.02;
 end
 if ~exist('nGrids','var')
-  nGrids=4%8%4%4%6;%10;%8;
+  nGrids=8%8%4%4%6;%10;%8;
 end
 if ~exist('refinementRatio','var')
   refinementRatio=2;
 end
 if ~exist('N','var')
-  N=2; % angular discretization 
+  N=4; % angular discretization 
 end
 if ~exist('angErrorRemoval','var')
   angErrorRemoval='no';
@@ -138,7 +138,7 @@ set(get(gca,'title'),'FontName','Times New Roman');
 set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
 
 hold off;
-savefig(scalarFluxErrorRMS_plot_handle,['temp_MoCEig_cellAveraged_phi_convergence_' assumedSoln]);
+savefig(scalarFluxErrorRMS_plot_handle,['MoC_LS_Eig_Physor2018_phi_complete_AER_' assumedSoln]);
 % savefig(scalarFluxErrorRMS_plot_handle,['MoCEig_Physor2016_cellAveraged_phi_convergence_' assumedSoln]);
 
 kError_plot_handle=figure;
@@ -168,7 +168,7 @@ set(get(gca,'title'),'FontName','Times New Roman');
 set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
 
 hold off;
-savefig(kError_plot_handle,['temp_MoCEig_Physor2016_k_convergence_' assumedSoln]);
+savefig(kError_plot_handle,['MoC_LS_Eig_Physor2018_k_complete_AER_' assumedSoln]);
 % savefig(kError_plot_handle,['MoCEig_Physor2016_k_convergence_' assumedSoln]);
 
 %% Dispaly the result
