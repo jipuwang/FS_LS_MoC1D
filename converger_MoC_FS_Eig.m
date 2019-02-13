@@ -27,18 +27,18 @@ if ~exist('k_MMS','var')
   k_MMS=1.02;
 end
 if ~exist('nGrids','var')
-  nGrids=4%8%4%4%6;%10;%8;
+  nGrids=10%4%8%4%4%6;%10;%8;
 end
 if ~exist('refinementRatio','var')
   refinementRatio=2;
 end
 if ~exist('N','var')
-  N=2; % angular discretization 
+  N=4; % angular discretization 
 end
 if ~exist('angErrorRemoval','var')
   angErrorRemoval='no';
   angErrorRemoval='partial';
-  angErrorRemoval='complete';
+%   angErrorRemoval='complete';
 end
 
 % Geometry
@@ -80,6 +80,7 @@ for iGrid=1:nGrids
       psi_b1_n,psi_b2_n,Q_MMS_j_n,...
       error_ang_j*0.0,...
       phi0_guess_j,k_guess);
+    phi0_j=phi0_j-error_ang_j;
   end
   if strcmp(angErrorRemoval,'complete')
     [phi0_j,k]=MoC_FS_Eig_module(J,N,Tau,mat,...
@@ -167,6 +168,76 @@ hold off;
 savefig(kError_plot_handle,['temp_MoCEig_Physor2016_k_convergence_' assumedSoln]);
 % savefig(kError_plot_handle,['MoCEig_Physor2016_k_convergence_' assumedSoln]);
 
+%% More plots using # of grid points as x axis. 
+noGridPts=ones(nGrids,1);
+for iGrid=1:nGrids
+  noGridPts(iGrid)=5*refinementRatio^iGrid;
+end
+
+orderPlotGrid=[noGridPts(1) noGridPts(end)];
+
+scalarFluxErrorRMS_plot_handle_2=figure;
+loglog(noGridPts,error_phi0_iGrid,'*');
+title({'cell-averaged scalar flux error convergence',...
+  ['\phi_{MMS}: ' assumedSoln '; k_{MMS}: ' num2str(k_MMS) '; Gaussian quad set order: ' num2str(N)]});
+xlabel('# of grid points');
+ylabel('RMS error of scalar flux');
+
+hold on;
+orderGuess=round(order_phi0_nMinus1(end));
+errorStt=error_phi0_iGrid(end)*refinementRatio^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+loglog(orderPlotGrid,firstOrder,'r--');
+loglog(orderPlotGrid,secondOrder,'g--');
+loglog(orderPlotGrid,thirdOrder,'b--');
+loglog(orderPlotGrid,fourthOrder,'k--');
+legend('scalar flux error','1st Order','2nd Order',...
+  '3rd Order','4th Order','location','best');
+
+set(get(gca,'xlabel'),'FontName','Times New Roman');
+set(get(gca,'ylabel'),'FontName','Times New Roman');
+set(get(gca,'title'),'FontName','Times New Roman');
+set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
+hold off;
+savefig(scalarFluxErrorRMS_plot_handle_2,['temp_MoCEig_cellAveraged_phi_convergence_' assumedSoln]);
+% savefig(scalarFluxErrorRMS_plot_handle,['MoCEig_Physor2016_cellAveraged_phi_convergence_' assumedSoln]);
+
+kError_plot_handle_2=figure;
+loglog(noGridPts,error_k_iGrid,'*');
+title({'k error convergence',...
+  ['\phi_{MMS}: ' assumedSoln '; k_{MMS}: ' num2str(k_MMS) '; Gaussian quad set order: ' num2str(N)]});
+xlabel('# of grid points');
+ylabel('k error');
+
+hold on;
+orderGuess=round(order_k_nMinus1(end));
+errorStt=error_k_iGrid(end)*refinementRatio^(orderGuess*(nGrids-1));
+firstOrder=[errorStt errorStt/refinementRatio^(nGrids-1)];
+secondOrder=[errorStt errorStt/refinementRatio^(2*(nGrids-1))];
+thirdOrder=[errorStt errorStt/refinementRatio^(3*(nGrids-1))];
+fourthOrder=[errorStt errorStt/refinementRatio^(4*(nGrids-1))];
+loglog(orderPlotGrid,firstOrder,'r--');
+loglog(orderPlotGrid,secondOrder,'g--');
+loglog(orderPlotGrid,thirdOrder,'b--');
+loglog(orderPlotGrid,fourthOrder,'k--');
+legend('k error','1st Order','2nd Order',...;
+  '3rd Order','4th Order','location','best');
+
+set(get(gca,'xlabel'),'FontName','Times New Roman');
+set(get(gca,'ylabel'),'FontName','Times New Roman');
+set(get(gca,'title'),'FontName','Times New Roman');
+set(findobj(gcf, 'Type', 'Legend'),'FontName','Times New Roman');
+
+hold off;
+savefig(kError_plot_handle_2,['temp_MoCEig_Physor2016_k_convergence_' assumedSoln]);
+% savefig(kError_plot_handle,['MoCEig_Physor2016_k_convergence_' assumedSoln]);
+
+
+
 %% Dispaly the result
 % Display the problem description and results
 disp '=================';
@@ -174,6 +245,7 @@ display(['assumedSoln: ' assumedSoln]);
 display(['Number of grids: ' num2str(nGrids)]);
 display(['refinementRatio: ' num2str(refinementRatio)]);
 display(['quad set order: ' num2str(N)]);
+display(['angErrorRemoval: ' angErrorRemoval]);
 
 error_phi0_iGrid
 order_phi0_nMinus1
